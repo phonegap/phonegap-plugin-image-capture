@@ -1,10 +1,10 @@
 {
-  "name": "cordova-plugin-camera",
+  "name": "phonegap-plugin-image-capture",
   "version": "2.4.2-dev",
   "description": "Cordova Camera Plugin",
   "types": "./types/index.d.ts",
   "cordova": {
-    "id": "cordova-plugin-camera",
+    "id": "phonegap-plugin-image-capture",
     "platforms": [
       "firefoxos",
       "android",
@@ -21,10 +21,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-camera"
+    "url": "https://github.com/phonegap/phonegap-plugin-image-capture"
   },
   "bugs": {
-    "url": "https://issues.apache.org/jira/browse/CB"
+    "url": "https://github.com/phonegap/phonegap-plugin-image-capture/issues"
   },
   "keywords": [
     "cordova",

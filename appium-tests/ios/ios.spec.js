@@ -24,7 +24,7 @@
 // these tests are meant to be executed by Cordova Paramedic test runner
 // you can find it here: https://github.com/apache/cordova-paramedic/
 // it is not necessary to do a full CI setup to run these tests
-// just run "node cordova-paramedic/main.js --platform ios --plugin cordova-plugin-camera"
+// just run "node cordova-paramedic/main.js --platform ios --plugin phonegap-plugin-image-capture"
 
 'use strict';
 
@@ -283,7 +283,7 @@ describe('Camera tests iOS.', function () {
             if (specsRun >= 15) {
                 specsRun = 0;
                 // we need to restart the session regularly because for some reason
-                // when running against iOS 10 simulator on SauceLabs, 
+                // when running against iOS 10 simulator on SauceLabs,
                 // Appium cannot handle more than ~20 specs at one session
                 // the error would be as follows:
                 // "Could not proxy command to remote server. Original error: Error: connect ECONNREFUSED 127.0.0.1:8100"
@@ -471,7 +471,7 @@ describe('Camera tests iOS.', function () {
                 if (spec.options.sourceType === cameraConstants.PictureSourceType.CAMERA &&
                     spec.options.destinationType === cameraConstants.DestinationType.NATIVE_URI) {
                     pending('Skipping: cannot prevent iOS from saving the picture to photo library and cannot delete it. ' +
-                        'For more info, see iOS quirks here: https://github.com/apache/cordova-plugin-camera#ios-quirks-1');
+                        'For more info, see iOS quirks here: https://github.com/phonegap/phonegap-plugin-image-capture#ios-quirks-1');
                 }
 
                 runSpec(spec.options, done, pending).done(done);

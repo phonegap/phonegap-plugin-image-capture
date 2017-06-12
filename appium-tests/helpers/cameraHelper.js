@@ -118,13 +118,13 @@ module.exports.checkPicture = function (pid, options, skipContentCheck, cb) {
     var isIos = cordova.platformId === "ios";
     var isAndroid = cordova.platformId === "android";
     // skip image type check if it's unmodified on Android:
-    // https://github.com/apache/cordova-plugin-camera/#android-quirks-1
+    // https://github.com/phonegap/phonegap-plugin-image-capture/#android-quirks-1
     var skipFileTypeCheckAndroid = isAndroid && options.quality === 100 &&
         !options.targetWidth && !options.targetHeight &&
         !options.correctOrientation;
 
     // Skip image type check if destination is NATIVE_URI and source - device's photoalbum
-    // https://github.com/apache/cordova-plugin-camera/#ios-quirks-1
+    // https://github.com/phonegap/phonegap-plugin-image-capture/#ios-quirks-1
     var skipFileTypeCheckiOS = isIos && options.destinationType === Camera.DestinationType.NATIVE_URI &&
         (options.sourceType === Camera.PictureSourceType.PHOTOLIBRARY ||
          options.sourceType === Camera.PictureSourceType.SAVEDPHOTOALBUM);
