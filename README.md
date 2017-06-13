@@ -21,11 +21,11 @@ description: Take pictures with the device camera.
 #         under the License.
 -->
 
-|Android 4.4|Android 5.1|Android 6.0|iOS 9.3|iOS 10.0|Windows 10 Store|Travis CI|
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=android-4.4,PLUGIN=phonegap-plugin-image-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=android-4.4,PLUGIN=phonegap-plugin-image-capture/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=android-5.1,PLUGIN=phonegap-plugin-image-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=android-5.1,PLUGIN=phonegap-plugin-image-capture/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=android-6.0,PLUGIN=phonegap-plugin-image-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=android-6.0,PLUGIN=phonegap-plugin-image-capture/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=ios-9.3,PLUGIN=phonegap-plugin-image-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=ios-9.3,PLUGIN=phonegap-plugin-image-capture/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=ios-10.0,PLUGIN=phonegap-plugin-image-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=ios-10.0,PLUGIN=phonegap-plugin-image-capture/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=windows-10-store,PLUGIN=phonegap-plugin-image-capture)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=windows-10-store,PLUGIN=phonegap-plugin-image-capture/)|[![Build Status](https://travis-ci.org/apache/phonegap-plugin-image-capture.svg?branch=master)](https://travis-ci.org/apache/phonegap-plugin-image-capture)
+|Android|iOS| Windows 8.1 Store | Windows 8.1 Phone | Windows 10 Store | Travis CI |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=android,PLUGIN=cordova-plugin-camera)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=android,PLUGIN=cordova-plugin-camera/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=ios,PLUGIN=cordova-plugin-camera)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=ios,PLUGIN=cordova-plugin-camera/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=windows-8.1-store,PLUGIN=cordova-plugin-camera)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=windows-8.1-store,PLUGIN=cordova-plugin-camera/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=windows-8.1-phone,PLUGIN=cordova-plugin-camera)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=windows-8.1-phone,PLUGIN=cordova-plugin-camera/)|[![Build Status](http://cordova-ci.cloudapp.net:8080/buildStatus/icon?job=cordova-periodic-build/PLATFORM=windows-10-store,PLUGIN=cordova-plugin-camera)](http://cordova-ci.cloudapp.net:8080/job/cordova-periodic-build/PLATFORM=windows-10-store,PLUGIN=cordova-plugin-camera/)|[![Build Status](https://travis-ci.org/phonegap/phonegap-plugin-image-capture.svg?branch=master)](https://travis-ci.org/phonegap/phonegap-plugin-image-capture)
 
-# phonegap-plugin-image-capture
+# cordova-plugin-camera
 
 This plugin defines a global `navigator.camera` object, which provides an API for taking pictures and for choosing images from
 the system's image library.
@@ -42,24 +42,24 @@ Although the object is attached to the global scoped `navigator`, it is not avai
 
 This requires cordova 5.0+
 
-    cordova plugin add phonegap-plugin-image-capture
+    cordova plugin add cordova-plugin-camera
 Older versions of cordova can still install via the __deprecated__ id
 
     cordova plugin add org.apache.cordova.camera
 It is also possible to install via repo url directly ( unstable )
 
-    cordova plugin add https://github.com/apache/phonegap-plugin-image-capture.git
+    cordova plugin add https://github.com/phonegap/phonegap-plugin-image-capture.git
 
 
 ## How to Contribute
 
-Contributors are welcome! And we need your contributions to keep the project moving forward. You can [report bugs](https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20(Open%2C%20%22In%20Progress%22%2C%20Reopened)%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22Plugin%20Camera%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC), improve the documentation, or [contribute code](https://github.com/apache/phonegap-plugin-image-capture/pulls).
+Contributors are welcome! And we need your contributions to keep the project moving forward. You can [report bugs](https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20(Open%2C%20%22In%20Progress%22%2C%20Reopened)%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22Plugin%20Camera%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC), improve the documentation, or [contribute code](https://github.com/phonegap/phonegap-plugin-image-capture/pulls).
 
 There is a specific [contributor workflow](http://wiki.apache.org/cordova/ContributorWorkflow) we recommend. Start reading there. More information is available on [our wiki](http://wiki.apache.org/cordova).
 
 :warning: **Found an issue?** File it on [JIRA issue tracker](https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20(Open%2C%20%22In%20Progress%22%2C%20Reopened)%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22Plugin%20Camera%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC).
 
-**Have a solution?** Send a [Pull Request](https://github.com/apache/phonegap-plugin-image-capture/pulls).
+**Have a solution?** Send a [Pull Request](https://github.com/phonegap/phonegap-plugin-image-capture/pulls).
 
 In order for your changes to be accepted, you need to sign and submit an Apache [ICLA](http://www.apache.org/licenses/#clas) (Individual Contributor License Agreement). Then your name will appear on the list of CLAs signed by [non-committers](https://people.apache.org/committer-index.html#unlistedclas) or [Cordova committers](http://people.apache.org/committers-by-project.html#cordova).
 
@@ -68,8 +68,8 @@ In order for your changes to be accepted, you need to sign and submit an Apache 
 
 ## This documentation is generated by a tool
 
-:warning: Run `npm install` in the plugin repo to enable automatic docs generation if you plan to send a PR.
-[jsdoc-to-markdown](https://www.npmjs.com/package/jsdoc-to-markdown) is used to generate the docs.
+:warning: Run `npm install` in the plugin repo to enable automatic docs generation if you plan to send a PR.  
+[jsdoc-to-markdown](https://www.npmjs.com/package/jsdoc-to-markdown) is used to generate the docs.  
 Documentation consists of template and API docs produced from the plugin JS code and should be regenerated before each commit (done automatically via [husky](https://github.com/typicode/husky), running `npm run gen-docs` script as a `precommit` hook - see `package.json` for details).
 
 
@@ -90,7 +90,7 @@ To add this entry you can pass the following variables on plugin install.
 
 Example:
 
-    cordova plugin add phonegap-plugin-image-capture --variable CAMERA_USAGE_DESCRIPTION="your usage message" --variable PHOTOLIBRARY_USAGE_DESCRIPTION="your usage message"
+    cordova plugin add cordova-plugin-camera --variable CAMERA_USAGE_DESCRIPTION="your usage message" --variable PHOTOLIBRARY_USAGE_DESCRIPTION="your usage message"
 
 If you don't pass the variable, the plugin will add an empty string as value.
 
@@ -173,7 +173,7 @@ __Supported Platforms__
 
 More examples [here](#camera-getPicture-examples). Quirks [here](#camera-getPicture-quirks).
 
-**Kind**: static method of <code>[camera](#module_camera)</code>
+**Kind**: static method of <code>[camera](#module_camera)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -181,7 +181,7 @@ More examples [here](#camera-getPicture-examples). Quirks [here](#camera-getPict
 | errorCallback | <code>[onError](#module_camera.onError)</code> |  |
 | options | <code>[CameraOptions](#module_camera.CameraOptions)</code> | CameraOptions |
 
-**Example**
+**Example**  
 ```js
 navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
 ```
@@ -197,8 +197,8 @@ __Supported Platforms__
 
 - iOS
 
-**Kind**: static method of <code>[camera](#module_camera)</code>
-**Example**
+**Kind**: static method of <code>[camera](#module_camera)</code>  
+**Example**  
 ```js
 navigator.camera.cleanup(onSuccess, onFail);
 
@@ -215,7 +215,7 @@ function onFail(message) {
 ### camera.onError : <code>function</code>
 Callback function that provides an error message.
 
-**Kind**: static typedef of <code>[camera](#module_camera)</code>
+**Kind**: static typedef of <code>[camera](#module_camera)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -226,13 +226,13 @@ Callback function that provides an error message.
 ### camera.onSuccess : <code>function</code>
 Callback function that provides the image data.
 
-**Kind**: static typedef of <code>[camera](#module_camera)</code>
+**Kind**: static typedef of <code>[camera](#module_camera)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | imageData | <code>string</code> | Base64 encoding of the image data, _or_ the image file URI, depending on [`cameraOptions`](#module_camera.CameraOptions) in effect. |
 
-**Example**
+**Example**  
 ```js
 // Show image
 //
@@ -247,7 +247,7 @@ function cameraCallback(imageData) {
 Optional parameters to customize the camera settings.
 * [Quirks](#CameraOptions-quirks)
 
-**Kind**: static typedef of <code>[camera](#module_camera)</code>
+**Kind**: static typedef of <code>[camera](#module_camera)</code>  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -279,7 +279,7 @@ _Note:_ On iOS passing `DestinationType.NATIVE_URI` along with
 disable any image modifications (resize, quality change, cropping, etc.) due
 to implementation specific.
 
-**Kind**: static enum property of <code>[Camera](#module_Camera)</code>
+**Kind**: static enum property of <code>[Camera](#module_Camera)</code>  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -291,7 +291,7 @@ to implementation specific.
 <a name="module_Camera.EncodingType"></a>
 
 ### Camera.EncodingType : <code>enum</code>
-**Kind**: static enum property of <code>[Camera](#module_Camera)</code>
+**Kind**: static enum property of <code>[Camera](#module_Camera)</code>  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -302,7 +302,7 @@ to implementation specific.
 <a name="module_Camera.MediaType"></a>
 
 ### Camera.MediaType : <code>enum</code>
-**Kind**: static enum property of <code>[Camera](#module_Camera)</code>
+**Kind**: static enum property of <code>[Camera](#module_Camera)</code>  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -319,7 +319,7 @@ _Note:_ On iOS passing `PictureSourceType.PHOTOLIBRARY` or `PictureSourceType.SA
 along with `DestinationType.NATIVE_URI` will disable any image modifications (resize, quality
 change, cropping, etc.) due to implementation specific.
 
-**Kind**: static enum property of <code>[Camera](#module_Camera)</code>
+**Kind**: static enum property of <code>[Camera](#module_Camera)</code>  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -333,21 +333,21 @@ change, cropping, etc.) due to implementation specific.
 ### Camera.PopoverArrowDirection : <code>enum</code>
 Matches iOS UIPopoverArrowDirection constants to specify arrow location on popover.
 
-**Kind**: static enum property of <code>[Camera](#module_Camera)</code>
+**Kind**: static enum property of <code>[Camera](#module_Camera)</code>  
 **Properties**
 
 | Name | Type | Default |
 | --- | --- | --- |
-| ARROW_UP | <code>number</code> | <code>1</code> |
-| ARROW_DOWN | <code>number</code> | <code>2</code> |
-| ARROW_LEFT | <code>number</code> | <code>4</code> |
-| ARROW_RIGHT | <code>number</code> | <code>8</code> |
-| ARROW_ANY | <code>number</code> | <code>15</code> |
+| ARROW_UP | <code>number</code> | <code>1</code> | 
+| ARROW_DOWN | <code>number</code> | <code>2</code> | 
+| ARROW_LEFT | <code>number</code> | <code>4</code> | 
+| ARROW_RIGHT | <code>number</code> | <code>8</code> | 
+| ARROW_ANY | <code>number</code> | <code>15</code> | 
 
 <a name="module_Camera.Direction"></a>
 
 ### Camera.Direction : <code>enum</code>
-**Kind**: static enum property of <code>[Camera](#module_Camera)</code>
+**Kind**: static enum property of <code>[Camera](#module_Camera)</code>  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -388,7 +388,7 @@ __Supported Platforms__
 
 - iOS
 
-**Example**
+**Example**  
 ```js
 navigator.camera.getPicture(onSuccess, onFail,
 {
