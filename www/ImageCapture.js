@@ -21,7 +21,7 @@
 /* globals DOMException, Promise */
 
 //var argscheck = require('cordova/argscheck'),
-//    exec = require('cordova/exec');
+var exec = require('cordova/exec');
 
 var ImageCapture = function(mediaStreamTrack) {
     this.track = mediaStreamTrack;
@@ -33,7 +33,43 @@ var ImageCapture = function(mediaStreamTrack) {
 
 ImageCapture.prototype.takePhoto = function(photoSettings) {
     return new Promise(function(resolve, reject) {
+        var success = function(info) {
+        console.log('success' + info);
+        var byteCharacters = atob(info);
+        var byteNumbers = new Array(byteCharacters.length);
+        for (var i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        var byteArray = new Uint8Array(byteNumbers);
+        var blob = new Blob([byteArray], {
+        type: 'image/png'
+        });
+        resolve(blob);
+        };
+        var options = {};
+        options.quality = null;
+        options.targetWidth = null;
+        options.targetHeight = null;
+        options.mediaType = null;
+        options.allowEdit = null;
+        options.correctOrientation = true;
+        options.saveToPhotoAlbum = null;
+        options.popoverOptions = null;
+        options.DestinationType = 0;
+        options.EncodingType = 1;
+        options.cameraDirection = 0;
+        options.sourceType = 1;
 
+        // pass track.kind as photoSettings for now
+        if (photoSettings === "frontcamera") {
+        options.cameraDirection = 1;
+        }
+        var args = [options.quality, options.DestinationType, options.sourceType,
+        options.targetWidth, options.targetHeight, options.EncodingType,
+        options.mediaType, options.allowEdit, options.correctOrientation,
+        options.saveToPhotoAlbum, options.popoverOptions, options.cameraDirection];
+
+        exec(success, null, "Camera", "takePicture", args);
     });
 };
 
