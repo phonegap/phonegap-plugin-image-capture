@@ -34,17 +34,17 @@ var ImageCapture = function(mediaStreamTrack) {
 ImageCapture.prototype.takePhoto = function(photoSettings) {
     return new Promise(function(resolve, reject) {
         var success = function(info) {
-        console.log('success' + info);
-        var byteCharacters = atob(info);
-        var byteNumbers = new Array(byteCharacters.length);
-        for (var i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        var byteArray = new Uint8Array(byteNumbers);
-        var blob = new Blob([byteArray], {
-        type: 'image/png'
-        });
-        resolve(blob);
+            console.log('success' + info);
+            var byteCharacters = atob(info);
+            var byteNumbers = new Array(byteCharacters.length);
+            for (var i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            var byteArray = new Uint8Array(byteNumbers);
+            var blob = new Blob([byteArray], {
+                type: 'image/png'
+            });
+            resolve(blob);
         };
         var options = {};
         options.quality = null;
@@ -62,7 +62,7 @@ ImageCapture.prototype.takePhoto = function(photoSettings) {
 
         // pass track.kind as photoSettings for now
         if (photoSettings === "frontcamera") {
-        options.cameraDirection = 1;
+            options.cameraDirection = 1;
         }
         var args = [options.quality, options.DestinationType, options.sourceType,
         options.targetWidth, options.targetHeight, options.EncodingType,
