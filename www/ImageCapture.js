@@ -62,19 +62,21 @@ ImageCapture.prototype.takePhoto = function(photoSettings) {
                 resolve(blob);
             }
         };
-        var options = {};
-        options.quality = null;
-        options.targetWidth = null;
-        options.targetHeight = null;
-        options.mediaType = null;
-        options.allowEdit = null;
-        options.correctOrientation = true;
-        options.saveToPhotoAlbum = null;
-        options.popoverOptions = null;
-        options.DestinationType = 0;
-        options.EncodingType = 1;
-        options.cameraDirection = 0;
-        options.sourceType = 1;
+
+        var options = {
+            quality: null,
+            targetWidth: null,
+            targetHeight: null,
+            mediaType: null,
+            allowEdit: null,
+            correctOrientation: true,
+            saveToPhotoAlbum: null,
+            popoverOptions: null,
+            DestinationType: 0,
+            EncodingType: 1,
+            cameraDirection: 0,
+            sourceType: 1 // default to PNG
+        };
 
         // pass track.kind as photoSettings for now
         if (photoSettings === "frontcamera") {

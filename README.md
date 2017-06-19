@@ -27,8 +27,8 @@ description: Take pictures with the device camera.
 
 # cordova-plugin-camera
 
-This plugin defines a global ImageCapture object, which provides an API for taking pictures by setting a blob(returned by the `takePhoto()` promise) as the image source. The content within the meta tag for the Content Security Policy in index.html has to be updated from `img-src 'self' data: content:` to
-    `img-src 'self' blob: data: content:`.
+This plugin defines a global `navigator.camera` object, which provides an API for taking pictures and for choosing images from
+the system's image library.
 
 Although the object is attached to the global scoped `navigator`, it is not available until after the `deviceready` event.
 
