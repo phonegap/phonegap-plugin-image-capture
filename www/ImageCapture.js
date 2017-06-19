@@ -18,7 +18,7 @@
  * under the License.
  *
 */
-/* globals DOMException, Promise */
+/* globals DOMException, Promise, self */
 
 //var argscheck = require('cordova/argscheck'),
 var exec = require('cordova/exec');
@@ -35,16 +35,32 @@ ImageCapture.prototype.takePhoto = function(photoSettings) {
     return new Promise(function(resolve, reject) {
         var success = function(info) {
             console.log('success' + info);
-            var byteCharacters = atob(info);
-            var byteNumbers = new Array(byteCharacters.length);
-            for (var i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
+
+            // if fetch exists & it is a native implementation
+            // use it as it is much faster
+            if (self.fetch && (/\{\s*\[native code\]\s*\}/).test('' + fetch)) {
+                fetch('data:image/png;base64,' + info)
+                    .then(function(res) {
+                        return res.blob();
+                    })
+                    .then(function(blob) {
+                        resolve(blob);
+                    })
+                    .catch(function() {
+                        reject();
+                    });
+            } else {
+                var byteCharacters = atob(info);
+                var byteNumbers = new Array(byteCharacters.length);
+                for (var i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+                var blob = new Blob([byteArray], {
+                    type: 'image/png'
+                });
+                resolve(blob);
             }
-            var byteArray = new Uint8Array(byteNumbers);
-            var blob = new Blob([byteArray], {
-                type: 'image/png'
-            });
-            resolve(blob);
         };
         var options = {};
         options.quality = null;
