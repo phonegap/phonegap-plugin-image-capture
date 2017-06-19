@@ -63,6 +63,10 @@ ImageCapture.prototype.takePhoto = function(photoSettings) {
             }
         };
 
+        var fail = function(error) {
+            reject(error);
+        };
+
         var options = {
             quality: null,
             targetWidth: null,
@@ -87,7 +91,7 @@ ImageCapture.prototype.takePhoto = function(photoSettings) {
         options.mediaType, options.allowEdit, options.correctOrientation,
         options.saveToPhotoAlbum, options.popoverOptions, options.cameraDirection];
 
-        exec(success, null, "Camera", "takePicture", args);
+        exec(success, fail, "Camera", "takePicture", args);
     });
 };
 
