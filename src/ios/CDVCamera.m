@@ -94,6 +94,7 @@ static NSString* toBase64(NSData* data) {
 @interface CDVCamera ()
 
 @property (readwrite, assign) BOOL hasPendingOperation;
+@property (assign, nonatomic) AVCaptureDevicePosition position;
 
 @end
 
