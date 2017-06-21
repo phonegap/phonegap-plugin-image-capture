@@ -95,9 +95,15 @@ ImageCapture.prototype.takePhoto = function(photoSettings) {
     });
 };
 
-ImageCapture.prototype.getPhotoCapabilities = function() {
+ImageCapture.prototype.getPhotoCapabilities = function(photoSettings) {
     return new Promise(function(resolve, reject) {
-
+        var success = function(info) {
+            console.log('success' + info);
+        };
+        var fail = function(error) {
+            reject(error);
+        };
+ exec(success, fail, "Camera", "getPhotoCapabilities", [photoSettings]);
     });
 };
 
