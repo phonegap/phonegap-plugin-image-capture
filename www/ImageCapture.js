@@ -25,13 +25,15 @@ var exec = require('cordova/exec');
 
 var ImageCapture = function(mediaStreamTrack) {
     this.track = mediaStreamTrack;
+    this.photoSettings = {};
     if (!this.track || this.track.kind !== 'video') {
         throw new DOMException();
     }
     return this;
 };
 
-ImageCapture.prototype.takePhoto = function(photoSettings) {
+ImageCapture.prototype.takePhoto = function() {
+    var trackDesc = this.track.description;
     return new Promise(function(resolve, reject) {
         var success = function(info) {
             console.log('success' + info);
@@ -68,48 +70,49 @@ ImageCapture.prototype.takePhoto = function(photoSettings) {
         };
 
         var options = {
-            quality: null,
-            targetWidth: null,
-            targetHeight: null,
-            mediaType: null,
-            allowEdit: null,
-            correctOrientation: true,
-            saveToPhotoAlbum: null,
-            popoverOptions: null,
-            DestinationType: 0,
-            EncodingType: 1,
-            cameraDirection: 0,
-            sourceType: 1 // default to PNG
+            whiteBalanceMode: null,
+            colorTemperature: null,
+            exposureMode: null,
+            exposureCompensation: null,
+            iso: null,
+            focusMode: true,
+            imageHeight: null,
+            imageWidth: null,
+            fillLightMode: 0,
+            cameraDirection: trackDesc
         };
 
-        // pass track.kind as photoSettings for now
-        if (photoSettings === "frontcamera") {
-            options.cameraDirection = 1;
-        }
-        var args = [options.quality, options.DestinationType, options.sourceType,
-        options.targetWidth, options.targetHeight, options.EncodingType,
-        options.mediaType, options.allowEdit, options.correctOrientation,
-        options.saveToPhotoAlbum, options.popoverOptions, options.cameraDirection];
+        var args = [options.whiteBalanceMode, options.colorTemperature, options.exposureMode,
+            options.exposureCompensation, options.iso, options.focusMode,
+            options.imageHeight, options.imageWidth, options.fillLightMode,
+            options.cameraDirection
+        ];
 
         exec(success, fail, "Camera", "takePicture", args);
     });
 };
 
-ImageCapture.prototype.getPhotoCapabilities = function(photoSettings) {
+ImageCapture.prototype.getPhotoCapabilities = function() {
+    var trackDesc = this.track.description;
     return new Promise(function(resolve, reject) {
         var success = function(info) {
-            console.log('success' + info);
+            console.log('success' + JSON.stringify(info));
         };
         var fail = function(error) {
             reject(error);
         };
- exec(success, fail, "Camera", "getPhotoCapabilities", [photoSettings]);
+ exec(success, fail, "Camera", "getPhotoCapabilities", [trackDesc]);
     });
 };
 
 ImageCapture.prototype.grabFrame = function() {
     return new Promise(function(resolve, reject) {
 
+    });
+};
+ImageCapture.prototype.setOptions = function(photoSettings) {
+    return new Promise(function(resolve, reject) {
+        this.photoSettings = photoSettings;
     });
 };
 

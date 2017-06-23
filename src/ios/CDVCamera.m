@@ -97,6 +97,9 @@ static NSString* toBase64(NSData* data) {
 @property (assign, nonatomic) AVCaptureDevicePosition position;
 @property (nonatomic) AVCapturePhotoOutput* avCapture;
 @property (nonatomic) AVCapturePhotoSettings* avSettings;
+@property (nonatomic) UIView* camview;
+@property (nonatomic) AVCaptureVideoPreviewLayer* previewLayer;
+@property (nonatomic) AVCaptureSession* session;
 
 @end
 
@@ -140,67 +143,126 @@ static NSString* toBase64(NSData* data) {
 }
 
 - (void)takePicture:(CDVInvokedUrlCommand*)command
+{
+        
+    NSString *desc  = command.arguments[9];
+    AVCaptureDevice *inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    if([desc isEqualToString:@"frontcamera"]){
+        inputDevice = [self frontCamera];
+    }
+    else if([desc isEqualToString:@"rearcamera"]){
+        inputDevice = [self rearCamera];
+    }
+        
+        //store callback to use in delegate
+    self.command = command;
+    self.session = [[AVCaptureSession alloc] init];
+    [self.session setSessionPreset:AVCaptureSessionPresetHigh];
+        
+        
+    NSError *error;
+    AVCaptureDeviceInput *deviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:inputDevice error:&error];
+        
+        
+    if ([self.session canAddInput:deviceInput]) {
+        [self.session addInput:deviceInput];
+    }
+        
+    _avCapture = [[AVCapturePhotoOutput alloc]init];
+    _avSettings = [AVCapturePhotoSettings photoSettings];
+    // self.movieOutput = [[AVCaptureMovieFileOutput alloc] init];
+    [self.session addOutput:self.avCapture];
+    AVCaptureConnection *connection = [self.avCapture connectionWithMediaType:AVMediaTypeVideo];
+    if (connection.active)
     {
-        __weak CDVCamera* weakSelf = self;
-        self.command = command;
-        AVCaptureSession *session = [[AVCaptureSession alloc] init];
-        [session setSessionPreset:AVCaptureSessionPresetHigh];
-        
-        AVCaptureDevice *inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-        NSError *error;
-        
-        AVCaptureDeviceInput *deviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:inputDevice error:&error];
-        
-        
-        if ([session canAddInput:deviceInput]) {
-            [session addInput:deviceInput];
-        }
-        
-        _avCapture = [[AVCapturePhotoOutput alloc]init];
-        _avSettings = [AVCapturePhotoSettings photoSettings];
-        // self.movieOutput = [[AVCaptureMovieFileOutput alloc] init];
-        [session addOutput:self.avCapture];
-        AVCaptureConnection *connection = [self.avCapture connectionWithMediaType:AVMediaTypeVideo];
-        
-        if (connection.active)
-        {
             //connection is active
-            NSLog(@"active");
-            AVCaptureVideoPreviewLayer *previewLayer = [[AVCaptureVideoPreviewLayer alloc ] initWithSession:session];
-            previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        NSLog(@"active");
+        _previewLayer = [[AVCaptureVideoPreviewLayer alloc ] initWithSession:self.session];
+        _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        _previewLayer.frame = self.webView.bounds;
+        [self.webView.layer addSublayer:self.previewLayer];
+        [self.session startRunning];
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button addTarget:self action:@selector(takePhoto) forControlEvents:UIControlEventTouchUpInside];
+        [button setTitle:@"Capture" forState:UIControlStateNormal];
+        button.frame = CGRectMake(0,0,100,50);
+        _camview = [[UIView alloc]initWithFrame:CGRectMake(0, self.webView.frame.size.height-80, self.webView.frame.size.width, 80)];
+        [self.camview setBackgroundColor:[UIColor blackColor]];
+        [self.webView addSubview:self.camview];
+        button.center = _camview.center;
+        [self.webView addSubview:button];
             
-            previewLayer.frame = self.webView.bounds;
-            [self.webView.layer addSublayer:previewLayer];
-            [session startRunning];
-            [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
-            
-            
-        }
-        else
-        {
-            NSLog(@"Connection is not active");
-            
-        }
-        //   [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
-        
-        
     }
-    
-    // AVPhotoCaptureDelegate
--(void)captureOutput:(AVCapturePhotoOutput *)captureOutput didFinishProcessingPhotoSampleBuffer:(CMSampleBufferRef)photoSampleBuffer previewPhotoSampleBuffer:(CMSampleBufferRef)previewPhotoSampleBuffer resolvedSettings:(AVCaptureResolvedPhotoSettings *)resolvedSettings bracketSettings:(AVCaptureBracketedStillImageSettings *)bracketSettings error:(NSError *)error
+    else
     {
-        if (error) {
-            NSLog(@"error : %@", error.localizedDescription);
-        }
+        NSLog(@"Connection is not active");
+            
+    }
         
-        if (photoSampleBuffer) {
-            NSData *data = [AVCapturePhotoOutput JPEGPhotoDataRepresentationForJPEGSampleBuffer:photoSampleBuffer previewPhotoSampleBuffer:previewPhotoSampleBuffer];
-            UIImage *image = [UIImage imageWithData:data];
+        
+    //   [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
+        
+        
+}
+    
+- (AVCaptureDevice *)frontCamera
+{
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    for (AVCaptureDevice *device in devices) {
+        if ([device position] == AVCaptureDevicePositionFront) {
+            return device;
         }
     }
+    return nil;
+}
     
-
-
+- (AVCaptureDevice *)rearCamera
+{
+    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    for (AVCaptureDevice *device in devices) {
+        if ([device position] == AVCaptureDevicePositionBack) {
+            return device;
+        }
+    }
+    return nil;
+}
+    
+-(void)takePhoto
+{
+    __weak CDVCamera* weakSelf = self;
+    [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
+    
+    
+    
+    for (UIView *view in [self.webView subviews])
+    {
+        [view removeFromSuperview];
+    }
+    //    for (CALayer *layer in [self.webView.layer sublayers]) {
+    //        [layer removeFromSuperlayer];
+    //    }
+    //   self.webView.layer.sublayers = nil;
+    //  [self.previewLayer removeFromSuperlayer];
+    [self.session stopRunning];
+    
+}
+    // AVPhotoCaptureDelegate
+    
+-(void)captureOutput:(AVCapturePhotoOutput *)captureOutput didFinishProcessingPhotoSampleBuffer:(CMSampleBufferRef)photoSampleBuffer previewPhotoSampleBuffer:(CMSampleBufferRef)previewPhotoSampleBuffer resolvedSettings:(AVCaptureResolvedPhotoSettings *)resolvedSettings bracketSettings:(AVCaptureBracketedStillImageSettings *)bracketSettings error:(NSError *)error
+{
+    if (error) {
+        NSLog(@"error : %@", error.localizedDescription);
+    }
+        
+    if (photoSampleBuffer) {
+        NSData *data = [AVCapturePhotoOutput JPEGPhotoDataRepresentationForJPEGSampleBuffer:photoSampleBuffer previewPhotoSampleBuffer:previewPhotoSampleBuffer];
+        UIImage *image = [UIImage imageWithData:data];
+        NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+        NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:base64];
+        [self.commandDelegate sendPluginResult:result callbackId:self.command.callbackId];
+    }
+}
 
 // Delegate for camera permission UIAlertView
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
