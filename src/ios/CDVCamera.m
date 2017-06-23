@@ -95,6 +95,8 @@ static NSString* toBase64(NSData* data) {
 
 @property (readwrite, assign) BOOL hasPendingOperation;
 @property (assign, nonatomic) AVCaptureDevicePosition position;
+@property (nonatomic) AVCapturePhotoOutput* avCapture;
+@property (nonatomic) AVCapturePhotoSettings* avSettings;
 
 @end
 
@@ -138,82 +140,67 @@ static NSString* toBase64(NSData* data) {
 }
 
 - (void)takePicture:(CDVInvokedUrlCommand*)command
-{
-    self.hasPendingOperation = YES;
-
-    __weak CDVCamera* weakSelf = self;
-
-    [self.commandDelegate runInBackground:^{
-
-        CDVPictureOptions* pictureOptions = [CDVPictureOptions createFromTakePictureArguments:command];
-        pictureOptions.popoverSupported = [weakSelf popoverSupported];
-        pictureOptions.usesGeolocation = [weakSelf usesGeolocation];
-        pictureOptions.cropToSize = NO;
-
-        BOOL hasCamera = [UIImagePickerController isSourceTypeAvailable:pictureOptions.sourceType];
-        if (!hasCamera) {
-            NSLog(@"Camera.getPicture: source type %lu not available.", (unsigned long)pictureOptions.sourceType);
-            CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No camera available"];
-            [weakSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-            return;
+    {
+        __weak CDVCamera* weakSelf = self;
+        self.command = command;
+        AVCaptureSession *session = [[AVCaptureSession alloc] init];
+        [session setSessionPreset:AVCaptureSessionPresetHigh];
+        
+        AVCaptureDevice *inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        NSError *error;
+        
+        AVCaptureDeviceInput *deviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:inputDevice error:&error];
+        
+        
+        if ([session canAddInput:deviceInput]) {
+            [session addInput:deviceInput];
         }
-
-        // Validate the app has permission to access the camera
-        if (pictureOptions.sourceType == UIImagePickerControllerSourceTypeCamera && [AVCaptureDevice respondsToSelector:@selector(authorizationStatusForMediaType:)]) {
-            AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-            if (authStatus == AVAuthorizationStatusDenied ||
-                authStatus == AVAuthorizationStatusRestricted) {
-                // If iOS 8+, offer a link to the Settings app
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wtautological-pointer-compare"
-                NSString* settingsButton = (&UIApplicationOpenSettingsURLString != NULL)
-                    ? NSLocalizedString(@"Settings", nil)
-                    : nil;
-#pragma clang diagnostic pop
-
-                // Denied; show an alert
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[[UIAlertView alloc] initWithTitle:[[NSBundle mainBundle]
-                                                         objectForInfoDictionaryKey:@"CFBundleDisplayName"]
-                                                message:NSLocalizedString(@"Access to the camera has been prohibited; please enable it in the Settings app to continue.", nil)
-                                               delegate:weakSelf
-                                      cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                      otherButtonTitles:settingsButton, nil] show];
-                });
-            }
+        
+        _avCapture = [[AVCapturePhotoOutput alloc]init];
+        _avSettings = [AVCapturePhotoSettings photoSettings];
+        // self.movieOutput = [[AVCaptureMovieFileOutput alloc] init];
+        [session addOutput:self.avCapture];
+        AVCaptureConnection *connection = [self.avCapture connectionWithMediaType:AVMediaTypeVideo];
+        
+        if (connection.active)
+        {
+            //connection is active
+            NSLog(@"active");
+            AVCaptureVideoPreviewLayer *previewLayer = [[AVCaptureVideoPreviewLayer alloc ] initWithSession:session];
+            previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            
+            previewLayer.frame = self.webView.bounds;
+            [self.webView.layer addSublayer:previewLayer];
+            [session startRunning];
+            [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
+            
+            
         }
+        else
+        {
+            NSLog(@"Connection is not active");
+            
+        }
+        //   [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
+        
+        
+    }
+    
+    // AVPhotoCaptureDelegate
+-(void)captureOutput:(AVCapturePhotoOutput *)captureOutput didFinishProcessingPhotoSampleBuffer:(CMSampleBufferRef)photoSampleBuffer previewPhotoSampleBuffer:(CMSampleBufferRef)previewPhotoSampleBuffer resolvedSettings:(AVCaptureResolvedPhotoSettings *)resolvedSettings bracketSettings:(AVCaptureBracketedStillImageSettings *)bracketSettings error:(NSError *)error
+    {
+        if (error) {
+            NSLog(@"error : %@", error.localizedDescription);
+        }
+        
+        if (photoSampleBuffer) {
+            NSData *data = [AVCapturePhotoOutput JPEGPhotoDataRepresentationForJPEGSampleBuffer:photoSampleBuffer previewPhotoSampleBuffer:previewPhotoSampleBuffer];
+            UIImage *image = [UIImage imageWithData:data];
+        }
+    }
+    
 
-        CDVCameraPicker* cameraPicker = [CDVCameraPicker createFromPictureOptions:pictureOptions];
-        weakSelf.pickerController = cameraPicker;
 
-        cameraPicker.delegate = weakSelf;
-        cameraPicker.callbackId = command.callbackId;
-        // we need to capture this state for memory warnings that dealloc this object
-        cameraPicker.webView = weakSelf.webView;
-
-        // Perform UI operations on the main thread
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // If a popover is already open, close it; we only want one at a time.
-            if (([[weakSelf pickerController] pickerPopoverController] != nil) && [[[weakSelf pickerController] pickerPopoverController] isPopoverVisible]) {
-                [[[weakSelf pickerController] pickerPopoverController] dismissPopoverAnimated:YES];
-                [[[weakSelf pickerController] pickerPopoverController] setDelegate:nil];
-                [[weakSelf pickerController] setPickerPopoverController:nil];
-            }
-
-            if ([weakSelf popoverSupported] && (pictureOptions.sourceType != UIImagePickerControllerSourceTypeCamera)) {
-                if (cameraPicker.pickerPopoverController == nil) {
-                    cameraPicker.pickerPopoverController = [[NSClassFromString(@"UIPopoverController") alloc] initWithContentViewController:cameraPicker];
-                }
-                [weakSelf displayPopover:pictureOptions.popoverOptions];
-                weakSelf.hasPendingOperation = NO;
-            } else {
-                [weakSelf.viewController presentViewController:cameraPicker animated:YES completion:^{
-                    weakSelf.hasPendingOperation = NO;
-                }];
-            }
-        });
-    }];
-}
 
 // Delegate for camera permission UIAlertView
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
