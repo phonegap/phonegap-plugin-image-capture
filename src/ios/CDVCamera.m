@@ -144,7 +144,7 @@ static NSString* toBase64(NSData* data) {
 
 - (void)takePicture:(CDVInvokedUrlCommand*)command
 {
-        
+
     NSString *desc  = command.arguments[9];
     AVCaptureDevice *inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     if([desc isEqualToString:@"frontcamera"]){
@@ -153,21 +153,21 @@ static NSString* toBase64(NSData* data) {
     else if([desc isEqualToString:@"rearcamera"]){
         inputDevice = [self rearCamera];
     }
-        
+
         //store callback to use in delegate
     self.command = command;
     self.session = [[AVCaptureSession alloc] init];
     [self.session setSessionPreset:AVCaptureSessionPresetHigh];
-        
-        
+
+
     NSError *error;
     AVCaptureDeviceInput *deviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:inputDevice error:&error];
-        
-        
+
+
     if ([self.session canAddInput:deviceInput]) {
         [self.session addInput:deviceInput];
     }
-        
+
     _avCapture = [[AVCapturePhotoOutput alloc]init];
     _avSettings = [AVCapturePhotoSettings photoSettings];
     // self.movieOutput = [[AVCaptureMovieFileOutput alloc] init];
@@ -191,20 +191,20 @@ static NSString* toBase64(NSData* data) {
         [self.webView addSubview:self.camview];
         button.center = _camview.center;
         [self.webView addSubview:button];
-            
+
     }
     else
     {
         NSLog(@"Connection is not active");
-            
+
     }
-        
-        
+
+
     //   [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
-        
-        
+
+
 }
-    
+
 - (AVCaptureDevice *)frontCamera
 {
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -215,7 +215,7 @@ static NSString* toBase64(NSData* data) {
     }
     return nil;
 }
-    
+
 - (AVCaptureDevice *)rearCamera
 {
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -226,34 +226,35 @@ static NSString* toBase64(NSData* data) {
     }
     return nil;
 }
-    
+
 -(void)takePhoto
 {
     __weak CDVCamera* weakSelf = self;
     [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
-    
-    
-    
-    for (UIView *view in [self.webView subviews])
-    {
-        [view removeFromSuperview];
-    }
+
+
+
+    //for (UIView *view in [self.webView subviews])
+    //{
+    //    [view removeFromSuperview];
+    //}
     //    for (CALayer *layer in [self.webView.layer sublayers]) {
     //        [layer removeFromSuperlayer];
     //    }
     //   self.webView.layer.sublayers = nil;
     //  [self.previewLayer removeFromSuperlayer];
     [self.session stopRunning];
-    
+    [self.previewLayer removeFromSuperlayer];
+
 }
     // AVPhotoCaptureDelegate
-    
+
 -(void)captureOutput:(AVCapturePhotoOutput *)captureOutput didFinishProcessingPhotoSampleBuffer:(CMSampleBufferRef)photoSampleBuffer previewPhotoSampleBuffer:(CMSampleBufferRef)previewPhotoSampleBuffer resolvedSettings:(AVCaptureResolvedPhotoSettings *)resolvedSettings bracketSettings:(AVCaptureBracketedStillImageSettings *)bracketSettings error:(NSError *)error
 {
     if (error) {
         NSLog(@"error : %@", error.localizedDescription);
     }
-        
+
     if (photoSampleBuffer) {
         NSData *data = [AVCapturePhotoOutput JPEGPhotoDataRepresentationForJPEGSampleBuffer:photoSampleBuffer previewPhotoSampleBuffer:previewPhotoSampleBuffer];
         UIImage *image = [UIImage imageWithData:data];
@@ -301,15 +302,15 @@ static NSString* toBase64(NSData* data) {
 - (void)getPhotoCapabilities:(CDVInvokedUrlCommand*)command
 {
     NSString *desc  = command.arguments[0];
-    
-    
+
+
     if([desc isEqualToString:@"frontcamera"]){
         _position = AVCaptureDevicePositionFront;
     }
     else if([desc isEqualToString:@"rearcamera"]){
         _position = AVCaptureDevicePositionBack;
     }
-    
+
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     NSMutableArray *exposureMode = [[NSMutableArray alloc] initWithCapacity:10];
     NSMutableArray *focusMode = [[NSMutableArray alloc] initWithCapacity:10];
@@ -333,7 +334,7 @@ static NSString* toBase64(NSData* data) {
                 [exposureMode addObject:@"none"];
             }
             [photocapabilities setObject:exposureMode forKey:@"exposureMode"];
-            
+
             if([device isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeLocked]){
                 [whiteBalanceMode addObject:@"none"];
             }
@@ -355,20 +356,20 @@ static NSString* toBase64(NSData* data) {
             [exposure setObject:[NSNumber numberWithFloat:minExposure] forKey:@"min"];
             [exposure setObject:[NSNumber numberWithFloat:maxExposure] forKey:@"max"];
             [exposure setObject:[NSNumber numberWithFloat:currExposure] forKey:@"current"];
-            
+
             [photocapabilities setObject:exposure forKey:@"exposureCompensation"];
-            
+
             float minISO = [[device activeFormat] minISO];
             float maxISO = [[device activeFormat] maxISO];
             float currISO = [device ISO];
-            
-            
+
+
             [iso setObject:[NSNumber numberWithFloat:minISO] forKey:@"min"];
             [iso setObject:[NSNumber numberWithFloat:maxISO] forKey:@"max"];
             [iso setObject:[NSNumber numberWithFloat:currISO] forKey:@"current"];
-            
+
             [photocapabilities setObject:iso forKey:@"iso"];
-            
+
             if([device isFocusModeSupported:AVCaptureFocusModeLocked]){
                 [focusMode addObject:@"none"];
             }
@@ -378,9 +379,9 @@ static NSString* toBase64(NSData* data) {
             if([device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]){
                 [focusMode addObject:@"continuous"];
             }
-            
+
             [photocapabilities setObject:focusMode forKey:@"focusMode"];
-            
+
             if([device isFocusPointOfInterestSupported]){
                 [photocapabilities setObject: @"true" forKey:@" pointsOfInterest"];
             }
@@ -400,13 +401,13 @@ static NSString* toBase64(NSData* data) {
                 [flashMode addObject:@"unavailable"];
             }
             [photocapabilities setObject:flashMode forKey:@"fillLightMode"];
-            
+
             CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:photocapabilities];
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
             return;
         }
     }
-    
+
 }
 - (NSInteger)integerValueForKey:(NSDictionary*)dict key:(NSString*)key defaultValue:(NSInteger)defaultValue
 {
