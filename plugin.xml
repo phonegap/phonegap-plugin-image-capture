@@ -33,10 +33,6 @@
     <dependency id="cordova-plugin-compat" version="^1.1.0" />
     <dependency id="es6-promise-plugin"/>
 
-    <js-module src="www/ImageCapture.js" name="ImageCapture">
-        <clobbers target="ImageCapture" />
-    </js-module>
-
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
@@ -76,6 +72,10 @@
 
      <!-- ios -->
      <platform name="ios">
+         <js-module src="www/ImageCapture.js" name="ImageCapture">
+             <clobbers target="ImageCapture" />
+         </js-module>
+
          <config-file target="config.xml" parent="/*">
              <feature name="Camera">
                  <param name="ios-package" value="CDVCamera" />
