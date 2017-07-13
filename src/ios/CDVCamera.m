@@ -100,7 +100,7 @@ static NSString* toBase64(NSData* data) {
 @property (nonatomic) UIView* camview;
 @property (nonatomic) AVCaptureVideoPreviewLayer* previewLayer;
 @property (nonatomic) AVCaptureSession* session;
-
+@property (nonatomic, strong) UIButton *button;
 @end
 
 @implementation CDVCamera
@@ -182,15 +182,15 @@ static NSString* toBase64(NSData* data) {
         _previewLayer.frame = self.webView.bounds;
         [self.webView.layer addSublayer:self.previewLayer];
         [self.session startRunning];
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button addTarget:self action:@selector(takePhoto) forControlEvents:UIControlEventTouchUpInside];
-        [button setTitle:@"Capture" forState:UIControlStateNormal];
-        button.frame = CGRectMake(0,0,100,50);
+        _button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.button addTarget:self action:@selector(takePhoto) forControlEvents:UIControlEventTouchUpInside];
+        [self.button setTitle:@"Capture" forState:UIControlStateNormal];
+        self.button.frame = CGRectMake(0,0,100,50);
         _camview = [[UIView alloc]initWithFrame:CGRectMake(0, self.webView.frame.size.height-80, self.webView.frame.size.width, 80)];
         [self.camview setBackgroundColor:[UIColor blackColor]];
         [self.webView addSubview:self.camview];
-        button.center = _camview.center;
-        [self.webView addSubview:button];
+        self.button.center = _camview.center;
+        [self.webView addSubview:self.button];
 
     }
     else
@@ -231,18 +231,8 @@ static NSString* toBase64(NSData* data) {
 {
     __weak CDVCamera* weakSelf = self;
     [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
-
-
-
-    //for (UIView *view in [self.webView subviews])
-    //{
-    //    [view removeFromSuperview];
-    //}
-    //    for (CALayer *layer in [self.webView.layer sublayers]) {
-    //        [layer removeFromSuperlayer];
-    //    }
-    //   self.webView.layer.sublayers = nil;
-    //  [self.previewLayer removeFromSuperlayer];
+    [self.camview removeFromSuperview];
+    [self.button removeFromSuperview];
     [self.session stopRunning];
     [self.previewLayer removeFromSuperlayer];
 
