@@ -70,20 +70,14 @@ ImageCapture.prototype.takePhoto = function() {
         };
 
         var options = {
-            whiteBalanceMode: null,
-            colorTemperature: null,
-            exposureMode: null,
-            exposureCompensation: null,
-            iso: null,
-            focusMode: true,
+            redEyeReduction:false,
             imageHeight: null,
             imageWidth: null,
-            fillLightMode: 0,
+            fillLightMode: "off",
             cameraDirection: trackDesc
         };
 
-        var args = [options.whiteBalanceMode, options.colorTemperature, options.exposureMode,
-            options.exposureCompensation, options.iso, options.focusMode,
+        var args = [options.redEyeReduction,
             options.imageHeight, options.imageWidth, options.fillLightMode,
             options.cameraDirection
         ];

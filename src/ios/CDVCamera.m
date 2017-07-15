@@ -101,6 +101,7 @@ static NSString* toBase64(NSData* data) {
 @property (nonatomic) AVCaptureVideoPreviewLayer* previewLayer;
 @property (nonatomic) AVCaptureSession* session;
 @property (nonatomic, strong) UIButton *button;
+@property (readwrite, assign) BOOL redEyeReduction;
 @end
 
 @implementation CDVCamera
@@ -145,15 +146,55 @@ static NSString* toBase64(NSData* data) {
 - (void)takePicture:(CDVInvokedUrlCommand*)command
 {
 
-    NSString *desc  = command.arguments[9];
+    self.redEyeReduction  = command.arguments[0];
+    // NSString *imageHeight  = command.arguments[1];
+    // NSString *imageWidth  = command.arguments[2];
+    NSString *fillLightMode  = command.arguments[3];
+    NSString *cameraDirection  = command.arguments[4];
     AVCaptureDevice *inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    if([desc isEqualToString:@"frontcamera"]){
+    
+    if([cameraDirection isEqualToString:@"frontcamera"]){
         inputDevice = [self frontCamera];
     }
-    else if([desc isEqualToString:@"rearcamera"]){
+    else if([cameraDirection isEqualToString:@"rearcamera"]){
         inputDevice = [self rearCamera];
     }
+    
+    
+   // flash light mode --needs more testing
+//    if([fillLightMode isEqualToString:@"flash"]){
+//        if([inputDevice isFlashModeSupported:AVCaptureFlashModeOn]){
+//            [inputDevice setFlashMode:AVCaptureFlashModeOn];
+//        }
+//    }
+//    if([fillLightMode isEqualToString:@"off"]){
+//        if([inputDevice isFlashModeSupported:AVCaptureFlashModeOff]){
+//            [inputDevice setFlashMode:AVCaptureFlashModeOff];
+//        }
+//    }
+//    if([fillLightMode isEqualToString:@"auto"]){
+//        if([inputDevice isFlashModeSupported:AVCaptureFlashModeAuto]){
+//            [inputDevice setFlashMode:AVCaptureFlashModeAuto];
+//        }
+//    }
+//    if([fillLightMode isEqualToString:@"torch"]){
+//        if([inputDevice isTorchModeSupported:AVCaptureTorchModeOn]){
+//            [inputDevice setTorchMode:AVCaptureTorchModeOn];
+//        }
+//    }
 
+    //Acceptable presets for height and width
+    
+    //    NSString *const AVCaptureSessionPresetPhoto;
+    //    NSString *const AVCaptureSessionPresetHigh;
+    //    NSString *const AVCaptureSessionPresetMedium;
+    //    NSString *const AVCaptureSessionPresetLow;
+    //    NSString *const AVCaptureSessionPreset320x240;
+    //    NSString *const AVCaptureSessionPreset352x288;
+    //    NSString *const AVCaptureSessionPreset640x480;
+    //    NSString *const AVCaptureSessionPreset960x540;
+    //    NSString *const AVCaptureSessionPreset1280x720;
+    
         //store callback to use in delegate
     self.command = command;
     self.session = [[AVCaptureSession alloc] init];
@@ -231,10 +272,6 @@ static NSString* toBase64(NSData* data) {
 {
     __weak CDVCamera* weakSelf = self;
     [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
-    [self.camview removeFromSuperview];
-    [self.button removeFromSuperview];
-    [self.session stopRunning];
-    [self.previewLayer removeFromSuperlayer];
 
 }
     // AVPhotoCaptureDelegate
@@ -247,11 +284,37 @@ static NSString* toBase64(NSData* data) {
 
     if (photoSampleBuffer) {
         NSData *data = [AVCapturePhotoOutput JPEGPhotoDataRepresentationForJPEGSampleBuffer:photoSampleBuffer previewPhotoSampleBuffer:previewPhotoSampleBuffer];
+        
+        //  size image to desired height/width  -- more testing required
+        
+        //        UIGraphicsBeginImageContext( size );
+        //        [image drawInRect:CGRectMake(0,0,size.width,size.height)];
+        //        UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+        //        UIGraphicsEndImageContext();
+        
+        //  red eye reduction -- more testing required
+        
+        //        if(self.redEyeReduction == YES){
+        //        CIImage *img = [CIImage imageWithData:data];
+        //        NSArray* adjustments = [img autoAdjustmentFiltersWithOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:kCIImageAutoAdjustEnhance]];
+        //        for (CIFilter *filter in adjustments) {
+        //            [filter setValue:img forKey:kCIInputImageKey];
+        //            img = filter.outputImage;
+        //        }
+        //        UIImage *newimage = [[UIImage alloc] initWithCIImage:img];
+        //        imageData = UIImageJPEGRepresentation(newimage, 1.0);
+        //        }
+        
         UIImage *image = [UIImage imageWithData:data];
         NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+        
         NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:base64];
         [self.commandDelegate sendPluginResult:result callbackId:self.command.callbackId];
+        [self.session stopRunning];
+        [self.previewLayer removeFromSuperlayer];
+        [self.camview removeFromSuperview];
+        [self.button removeFromSuperview];
     }
 }
 
@@ -302,79 +365,10 @@ static NSString* toBase64(NSData* data) {
     }
 
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    NSMutableArray *exposureMode = [[NSMutableArray alloc] initWithCapacity:10];
-    NSMutableArray *focusMode = [[NSMutableArray alloc] initWithCapacity:10];
-    NSMutableArray *whiteBalanceMode = [[NSMutableArray alloc] initWithCapacity:10];
     NSMutableArray *flashMode = [[NSMutableArray alloc] initWithCapacity:10];
-    NSMutableDictionary *exposure = [NSMutableDictionary dictionaryWithCapacity:10];
-    NSMutableDictionary *iso = [NSMutableDictionary dictionaryWithCapacity:10];
     NSMutableDictionary *photocapabilities = [NSMutableDictionary dictionaryWithCapacity:10];
     for (AVCaptureDevice *device in devices){
         if(device.position == _position){
-            if([device isExposureModeSupported:AVCaptureExposureModeAutoExpose]){
-                [exposureMode addObject:@"single-shot"];
-            }
-            if([device isExposureModeSupported:AVCaptureExposureModeCustom]){
-                [exposureMode addObject:@"manual"];
-            }
-            if([device isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure]){
-                [exposureMode addObject:@"continuous"];
-            }
-            if([device isExposureModeSupported:AVCaptureExposureModeLocked]){
-                [exposureMode addObject:@"none"];
-            }
-            [photocapabilities setObject:exposureMode forKey:@"exposureMode"];
-
-            if([device isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeLocked]){
-                [whiteBalanceMode addObject:@"none"];
-            }
-            if([device isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeAutoWhiteBalance]){
-                // single shot
-                [whiteBalanceMode addObject:@"single-shot"];
-            }
-            if([device isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeContinuousAutoWhiteBalance]){
-                // continuous
-                [whiteBalanceMode addObject:@"continuous"];
-            }
-            [photocapabilities setObject:whiteBalanceMode forKey:@"whiteBalanceMode"];
-            //       AVCaptureWhiteBalanceTemperatureAndTintValues temp = [device temperatureAndTintValuesForDeviceWhiteBalanceGains:AVCaptureWhiteBalanceGainsCurrent];
-            //       NSLog(@"%f@",temp );
-            //
-            float minExposure = CMTimeGetSeconds([[device activeFormat] minExposureDuration]);
-            float maxExposure = CMTimeGetSeconds([[device activeFormat] maxExposureDuration]);
-            float currExposure = CMTimeGetSeconds([device exposureDuration]);
-            [exposure setObject:[NSNumber numberWithFloat:minExposure] forKey:@"min"];
-            [exposure setObject:[NSNumber numberWithFloat:maxExposure] forKey:@"max"];
-            [exposure setObject:[NSNumber numberWithFloat:currExposure] forKey:@"current"];
-
-            [photocapabilities setObject:exposure forKey:@"exposureCompensation"];
-
-            float minISO = [[device activeFormat] minISO];
-            float maxISO = [[device activeFormat] maxISO];
-            float currISO = [device ISO];
-
-
-            [iso setObject:[NSNumber numberWithFloat:minISO] forKey:@"min"];
-            [iso setObject:[NSNumber numberWithFloat:maxISO] forKey:@"max"];
-            [iso setObject:[NSNumber numberWithFloat:currISO] forKey:@"current"];
-
-            [photocapabilities setObject:iso forKey:@"iso"];
-
-            if([device isFocusModeSupported:AVCaptureFocusModeLocked]){
-                [focusMode addObject:@"none"];
-            }
-            if([device isFocusModeSupported:AVCaptureFocusModeAutoFocus]){
-                [focusMode addObject:@"manual"];
-            }
-            if([device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]){
-                [focusMode addObject:@"continuous"];
-            }
-
-            [photocapabilities setObject:focusMode forKey:@"focusMode"];
-
-            if([device isFocusPointOfInterestSupported]){
-                [photocapabilities setObject: @"true" forKey:@" pointsOfInterest"];
-            }
             if([device isFlashModeSupported:AVCaptureFlashModeOn]){
                 [flashMode addObject:@"flash"];
             }
