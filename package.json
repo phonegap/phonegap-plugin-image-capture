@@ -60,8 +60,9 @@
   "devDependencies": {
     "dmd-plugin-cordova-plugin": "^0.1.0",
     "husky": "^0.10.1",
+    "jasmine-node": "^1.14.5",
     "jsdoc-to-markdown": "^1.2.0",
     "jshint": "^2.6.0",
-    "jasmine-node": "^1.14.5"
+    "pluginpub": "^0.0.8"
   }
 }
