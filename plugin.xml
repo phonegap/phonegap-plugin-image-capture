@@ -23,8 +23,8 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     id="phonegap-plugin-image-capture"
     version="0.0.1">
-    <name>Camera</name>
-    <description>Cordova Camera Plugin</description>
+    <name>Image Capture</name>
+    <description>PhoneGap Image Capture Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,camera</keywords>
     <repo>https://github.com/phonegap/phonegap-plugin-image-capture.git</repo>
@@ -35,7 +35,7 @@
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="Camera">
+            <feature name="ImageCapture">
                 <param name="android-package" value="org.apache.cordova.camera.CameraLauncher"/>
             </feature>
         </config-file>
@@ -76,7 +76,7 @@
          </js-module>
 
          <config-file target="config.xml" parent="/*">
-             <feature name="Camera">
+             <feature name="ImageCapture">
                  <param name="ios-package" value="CDVCamera" />
              </feature>
              <preference name="CameraUsesGeolocation" value="false" />
@@ -120,8 +120,8 @@
     <!-- browser -->
     <platform name="browser">
         <config-file target="config.xml" parent="/*">
-            <feature name="Camera">
-                <param name="browser-package" value="Camera" />
+            <feature name="ImageCapture">
+                <param name="browser-package" value="ImageCapture" />
             </feature>
         </config-file>
 

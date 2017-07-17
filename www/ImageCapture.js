@@ -82,7 +82,7 @@ ImageCapture.prototype.takePhoto = function() {
             options.cameraDirection
         ];
 
-        exec(success, fail, "Camera", "takePicture", args);
+        exec(success, fail, "ImageCapture", "takePicture", args);
     });
 };
 
@@ -95,7 +95,7 @@ ImageCapture.prototype.getPhotoCapabilities = function() {
         var fail = function(error) {
             reject(error);
         };
- exec(success, fail, "Camera", "getPhotoCapabilities", [trackDesc]);
+        exec(success, fail, "ImageCapture", "getPhotoCapabilities", [trackDesc]);
     });
 };
 
