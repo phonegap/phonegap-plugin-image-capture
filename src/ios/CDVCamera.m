@@ -152,15 +152,15 @@ static NSString* toBase64(NSData* data) {
     NSString *fillLightMode  = command.arguments[3];
     NSString *cameraDirection  = command.arguments[4];
     AVCaptureDevice *inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    
+
     if([cameraDirection isEqualToString:@"frontcamera"]){
-        inputDevice = [self frontCamera];
+        inputDevice = [self getCaptureDevice:AVCaptureDevicePositionFront];
     }
     else if([cameraDirection isEqualToString:@"rearcamera"]){
-        inputDevice = [self rearCamera];
+        inputDevice = [self getCaptureDevice:AVCaptureDevicePositionBack];
     }
-    
-    
+
+
    // flash light mode --needs more testing
 //    if([fillLightMode isEqualToString:@"flash"]){
 //        if([inputDevice isFlashModeSupported:AVCaptureFlashModeOn]){
@@ -184,7 +184,7 @@ static NSString* toBase64(NSData* data) {
 //    }
 
     //Acceptable presets for height and width
-    
+
     //    NSString *const AVCaptureSessionPresetPhoto;
     //    NSString *const AVCaptureSessionPresetHigh;
     //    NSString *const AVCaptureSessionPresetMedium;
@@ -194,7 +194,7 @@ static NSString* toBase64(NSData* data) {
     //    NSString *const AVCaptureSessionPreset640x480;
     //    NSString *const AVCaptureSessionPreset960x540;
     //    NSString *const AVCaptureSessionPreset1280x720;
-    
+
         //store callback to use in delegate
     self.command = command;
     self.session = [[AVCaptureSession alloc] init];
@@ -246,22 +246,11 @@ static NSString* toBase64(NSData* data) {
 
 }
 
-- (AVCaptureDevice *)frontCamera
+- (AVCaptureDevice *)getCaptureDevice:(int)facing
 {
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     for (AVCaptureDevice *device in devices) {
-        if ([device position] == AVCaptureDevicePositionFront) {
-            return device;
-        }
-    }
-    return nil;
-}
-
-- (AVCaptureDevice *)rearCamera
-{
-    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    for (AVCaptureDevice *device in devices) {
-        if ([device position] == AVCaptureDevicePositionBack) {
+        if ([device position] == facing) {
             return device;
         }
     }
@@ -284,16 +273,16 @@ static NSString* toBase64(NSData* data) {
 
     if (photoSampleBuffer) {
         NSData *data = [AVCapturePhotoOutput JPEGPhotoDataRepresentationForJPEGSampleBuffer:photoSampleBuffer previewPhotoSampleBuffer:previewPhotoSampleBuffer];
-        
+
         //  size image to desired height/width  -- more testing required
-        
+
         //        UIGraphicsBeginImageContext( size );
         //        [image drawInRect:CGRectMake(0,0,size.width,size.height)];
         //        UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
         //        UIGraphicsEndImageContext();
-        
+
         //  red eye reduction -- more testing required
-        
+
         //        if(self.redEyeReduction == YES){
         //        CIImage *img = [CIImage imageWithData:data];
         //        NSArray* adjustments = [img autoAdjustmentFiltersWithOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:kCIImageAutoAdjustEnhance]];
@@ -304,10 +293,10 @@ static NSString* toBase64(NSData* data) {
         //        UIImage *newimage = [[UIImage alloc] initWithCIImage:img];
         //        imageData = UIImageJPEGRepresentation(newimage, 1.0);
         //        }
-        
+
         UIImage *image = [UIImage imageWithData:data];
         NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
-        
+
         NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:base64];
         [self.commandDelegate sendPluginResult:result callbackId:self.command.callbackId];
