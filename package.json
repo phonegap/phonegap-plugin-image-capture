@@ -1,6 +1,6 @@
 {
   "name": "phonegap-plugin-image-capture",
-  "version": "2.4.2-dev",
+  "version": "0.0.1",
   "description": "Cordova Camera Plugin",
   "types": "./types/index.d.ts",
   "cordova": {
