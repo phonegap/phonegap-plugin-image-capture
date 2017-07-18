@@ -119,14 +119,8 @@
 
     <!-- browser -->
     <platform name="browser">
-        <config-file target="config.xml" parent="/*">
-            <feature name="ImageCapture">
-                <param name="browser-package" value="ImageCapture" />
-            </feature>
-        </config-file>
-
-        <js-module src="src/browser/CameraProxy.js" name="CameraProxy">
-            <runs />
+        <js-module src="src/browser/ImageCapture.js" name="ImageCapture">
+            <clobbers target="window.ImageCapture" />
         </js-module>
     </platform>
 
