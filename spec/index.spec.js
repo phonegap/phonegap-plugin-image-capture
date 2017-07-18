@@ -72,11 +72,48 @@ describe('phonegap-plugin-image-capture', function () {
     });
 
     describe('takePhoto', function () {
-        it('should return a Promise', function () {
+        it('should return a Promise with all types of photoSettings', function () {
             var capture = new ImageCapture({ kind: 'video'});
-            var p = capture.takePhoto();
+            var photoSettings = {
+                imageHeight : 800,
+                imageWidth : 600
+            };
+            var p = capture.takePhoto(photoSettings);
             expect(p).toBeDefined();
             expect(typeof p === 'object').toBe(true);
+            photoSettings = {};
+            p = capture.takePhoto(photoSettings);
+            expect(p).toBeDefined();
+            expect(typeof p === 'object').toBe(true);
+            photoSettings = {
+                redEyeReduction : false,
+                imageHeight : 500,
+                imageWidth : 500,
+                fillLightMode : "flash"
+            };
+            p = capture.takePhoto(photoSettings);
+            expect(p).toBeDefined();
+            expect(typeof p === 'object').toBe(true);
+            photoSettings = {
+                redEyeReduction : false,
+                fillLightMode : "flash"
+            };
+            p = capture.takePhoto(photoSettings);
+            expect(p).toBeDefined();
+            expect(typeof p === 'object').toBe(true);
+            photoSettings = {
+                fillLightMode : "off"
+            };
+            p = capture.takePhoto(photoSettings);
+            expect(p).toBeDefined();
+            expect(typeof p === 'object').toBe(true);
+            photoSettings = {
+                redEyeReduction : true
+            };
+            p = capture.takePhoto(photoSettings);
+            expect(p).toBeDefined();
+            expect(typeof p === 'object').toBe(true);
+
         });
     });
 
