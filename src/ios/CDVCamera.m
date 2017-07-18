@@ -101,8 +101,11 @@ static NSString* toBase64(NSData* data) {
 @property (nonatomic) AVCaptureVideoPreviewLayer* previewLayer;
 @property (nonatomic) AVCaptureSession* session;
 @property (nonatomic, strong) UIButton *button;
+@property (nonatomic, assign) CGSize targetSize;
+@property (nonatomic, assign) CGSize defaultSize;
 @property (readwrite, assign) BOOL redEyeReduction;
 @end
+
 
 @implementation CDVCamera
 
@@ -147,63 +150,53 @@ static NSString* toBase64(NSData* data) {
 {
 
     self.redEyeReduction  = command.arguments[0];
-    // NSString *imageHeight  = command.arguments[1];
-    // NSString *imageWidth  = command.arguments[2];
+    NSString *imageHeight  = command.arguments[1];
+    NSString *imageWidth  = command.arguments[2];
+    if((imageHeight !=nil && imageHeight != (id)[NSNull null] ) && (imageHeight !=nil && imageHeight != (id)[NSNull null] )){
+        _targetSize = CGSizeMake([imageWidth floatValue], [imageHeight floatValue]);
+    }
+    else{
+        _targetSize = CGSizeMake(0, 0);
+    }
     NSString *fillLightMode  = command.arguments[3];
     NSString *cameraDirection  = command.arguments[4];
     AVCaptureDevice *inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-
+    
     if([cameraDirection isEqualToString:@"frontcamera"]){
         inputDevice = [self getCaptureDevice:AVCaptureDevicePositionFront];
     }
     else if([cameraDirection isEqualToString:@"rearcamera"]){
         inputDevice = [self getCaptureDevice:AVCaptureDevicePositionBack];
+        
     }
+    
+    [inputDevice lockForConfiguration:nil];
+    if([fillLightMode isEqualToString:@"flash"]){
+        if([inputDevice isFlashModeSupported:AVCaptureFlashModeOn]){
+            [inputDevice setFlashMode:AVCaptureFlashModeOn];
+            // [inputDevice setTorchMode:AVCaptureTorchModeOn];
+        }
+    }
+    if([fillLightMode isEqualToString:@"off"]){
+        if([inputDevice isFlashModeSupported:AVCaptureFlashModeOff]){
+            [inputDevice setFlashMode:AVCaptureFlashModeOff];
+        }
+    }
+    if([fillLightMode isEqualToString:@"auto"]){
+        if([inputDevice isFlashModeSupported:AVCaptureFlashModeAuto]){
+            [inputDevice setFlashMode:AVCaptureFlashModeAuto];
+            //  [inputDevice setTorchMode:AVCaptureTorchModeAuto];
+        }
+    }
+    [inputDevice unlockForConfiguration];
 
-
-   // flash light mode --needs more testing
-//    if([fillLightMode isEqualToString:@"flash"]){
-//        if([inputDevice isFlashModeSupported:AVCaptureFlashModeOn]){
-//            [inputDevice setFlashMode:AVCaptureFlashModeOn];
-//        }
-//    }
-//    if([fillLightMode isEqualToString:@"off"]){
-//        if([inputDevice isFlashModeSupported:AVCaptureFlashModeOff]){
-//            [inputDevice setFlashMode:AVCaptureFlashModeOff];
-//        }
-//    }
-//    if([fillLightMode isEqualToString:@"auto"]){
-//        if([inputDevice isFlashModeSupported:AVCaptureFlashModeAuto]){
-//            [inputDevice setFlashMode:AVCaptureFlashModeAuto];
-//        }
-//    }
-//    if([fillLightMode isEqualToString:@"torch"]){
-//        if([inputDevice isTorchModeSupported:AVCaptureTorchModeOn]){
-//            [inputDevice setTorchMode:AVCaptureTorchModeOn];
-//        }
-//    }
-
-    //Acceptable presets for height and width
-
-    //    NSString *const AVCaptureSessionPresetPhoto;
-    //    NSString *const AVCaptureSessionPresetHigh;
-    //    NSString *const AVCaptureSessionPresetMedium;
-    //    NSString *const AVCaptureSessionPresetLow;
-    //    NSString *const AVCaptureSessionPreset320x240;
-    //    NSString *const AVCaptureSessionPreset352x288;
-    //    NSString *const AVCaptureSessionPreset640x480;
-    //    NSString *const AVCaptureSessionPreset960x540;
-    //    NSString *const AVCaptureSessionPreset1280x720;
-
-        //store callback to use in delegate
+    //store callback to use in delegate
     self.command = command;
     self.session = [[AVCaptureSession alloc] init];
-    [self.session setSessionPreset:AVCaptureSessionPresetHigh];
-
+    //[self.session setSessionPreset:AVCaptureSessionPresetHigh];
 
     NSError *error;
     AVCaptureDeviceInput *deviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:inputDevice error:&error];
-
 
     if ([self.session canAddInput:deviceInput]) {
         [self.session addInput:deviceInput];
@@ -273,16 +266,26 @@ static NSString* toBase64(NSData* data) {
 
     if (photoSampleBuffer) {
         NSData *data = [AVCapturePhotoOutput JPEGPhotoDataRepresentationForJPEGSampleBuffer:photoSampleBuffer previewPhotoSampleBuffer:previewPhotoSampleBuffer];
-
-        //  size image to desired height/width  -- more testing required
-
-        //        UIGraphicsBeginImageContext( size );
-        //        [image drawInRect:CGRectMake(0,0,size.width,size.height)];
-        //        UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
-        //        UIGraphicsEndImageContext();
-
+        UIImage *image = [UIImage imageWithData:data];
+        NSLog(@"%f", image.size.height);
+        NSLog(@"%f", image.size.width);
+        _defaultSize = CGSizeMake(image.size.width , image.size.height);
+        NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+        UIImage* scaledImage = nil;
+        if((self.targetSize.width > 0) && (self.targetSize.height >0)){
+            // scaledImage = [image imageByScalingNotCroppingForSize:self.targetSize];
+            if (CGSizeEqualToSize(image.size, self.targetSize) == NO) {
+                UIGraphicsBeginImageContext( self.targetSize);
+                [image drawInRect:CGRectMake(0,0,self.targetSize.width,self.targetSize.height)];
+                scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+                UIGraphicsEndImageContext();
+                imageData = UIImageJPEGRepresentation(scaledImage, 1.0);
+            }
+        }
+        NSLog(@"%f", scaledImage.size.height);
+        NSLog(@"%f", scaledImage.size.width);
         //  red eye reduction -- more testing required
-
+        
         //        if(self.redEyeReduction == YES){
         //        CIImage *img = [CIImage imageWithData:data];
         //        NSArray* adjustments = [img autoAdjustmentFiltersWithOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:kCIImageAutoAdjustEnhance]];
@@ -293,10 +296,7 @@ static NSString* toBase64(NSData* data) {
         //        UIImage *newimage = [[UIImage alloc] initWithCIImage:img];
         //        imageData = UIImageJPEGRepresentation(newimage, 1.0);
         //        }
-
-        UIImage *image = [UIImage imageWithData:data];
-        NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
-
+        
         NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:base64];
         [self.commandDelegate sendPluginResult:result callbackId:self.command.callbackId];
@@ -382,6 +382,39 @@ static NSString* toBase64(NSData* data) {
     }
 
 }
+
+- (void)getPhotoSettings:(CDVInvokedUrlCommand*)command
+{
+    NSString *desc  = command.arguments[0];
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    NSMutableDictionary *photoSettings = [NSMutableDictionary dictionaryWithCapacity:4];
+    if([desc isEqualToString:@"frontcamera"]){
+        device = [self getCaptureDevice:AVCaptureDevicePositionFront];
+    }
+    else if([desc isEqualToString:@"rearcamera"]){
+        device = [self getCaptureDevice:AVCaptureDevicePositionBack];;
+    }
+    
+    if([device flashMode] == AVCaptureFlashModeOff){
+        [photoSettings setObject:@"off" forKey:@"fillLightMode"];
+    }
+    else if([device flashMode] == AVCaptureFlashModeOn){
+        [photoSettings setObject:@"flash" forKey:@"fillLightMode"];
+    }
+    else if([device flashMode] == AVCaptureFlashModeAuto){
+        [photoSettings setObject:@"auto" forKey:@"fillLightMode"];
+    }
+    if((self.defaultSize.width > 0) && (self.defaultSize.height >0)){
+        [photoSettings setObject:[NSNumber numberWithFloat:self.defaultSize.width] forKey:@"imageWidth"];
+        [photoSettings setObject:[NSNumber numberWithFloat:self.defaultSize.height] forKey:@"imageHeight"];
+        
+    }
+    
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:photoSettings];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    
+}
+
 - (NSInteger)integerValueForKey:(NSDictionary*)dict key:(NSString*)key defaultValue:(NSInteger)defaultValue
 {
     NSInteger value = defaultValue;

@@ -32,7 +32,7 @@ var ImageCapture = function(mediaStreamTrack) {
     return this;
 };
 
-ImageCapture.prototype.takePhoto = function() {
+ImageCapture.prototype.takePhoto = function(photoSettings) {
     var trackDesc = this.track.description;
     return new Promise(function(resolve, reject) {
         var success = function(info) {
@@ -71,15 +71,18 @@ ImageCapture.prototype.takePhoto = function() {
 
         var options = {
             redEyeReduction:false,
-            imageHeight: null,
-            imageWidth: null,
-            fillLightMode: "off",
-            cameraDirection: trackDesc
+            imageHeight: 1920,
+            imageWidth: 1080,
+            fillLightMode: "off"
         };
+
+        if(photoSettings != undefined) {
+            options = photoSettings;
+        }
 
         var args = [options.redEyeReduction,
             options.imageHeight, options.imageWidth, options.fillLightMode,
-            options.cameraDirection
+            trackDesc
         ];
 
         exec(success, fail, "ImageCapture", "takePicture", args);
@@ -91,6 +94,7 @@ ImageCapture.prototype.getPhotoCapabilities = function() {
     return new Promise(function(resolve, reject) {
         var success = function(info) {
             console.log('success' + JSON.stringify(info));
+            resolve(info);
         };
         var fail = function(error) {
             reject(error);
@@ -98,6 +102,21 @@ ImageCapture.prototype.getPhotoCapabilities = function() {
         exec(success, fail, "ImageCapture", "getPhotoCapabilities", [trackDesc]);
     });
 };
+
+ImageCapture.prototype.getPhotoSettings = function() {
+    var trackDesc = this.track.description;
+    return new Promise(function(resolve, reject) {
+        var success = function(info) {
+            console.log('success' + JSON.stringify(info));
+            resolve(info);
+        };
+        var fail = function(error) {
+            reject(error);
+        };
+ exec(success, fail, "ImageCapture", "getPhotoSettings", [trackDesc]);
+    });
+};
+
 
 ImageCapture.prototype.grabFrame = function() {
     return new Promise(function(resolve, reject) {
