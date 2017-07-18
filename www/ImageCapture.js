@@ -18,10 +18,10 @@
  * under the License.
  *
 */
-/* globals DOMException, Promise, self */
+/* globals DOMException, Promise, self, cordova */
 
-var argscheck = require('cordova/argscheck'),
-    exec = require('cordova/exec');
+var argscheck = cordova.require('cordova/argscheck'),
+    exec = cordova.require('cordova/exec');
 
 var ImageCapture = function(mediaStreamTrack) {
     this.track = mediaStreamTrack;
