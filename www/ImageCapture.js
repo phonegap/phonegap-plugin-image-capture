@@ -20,8 +20,8 @@
 */
 /* globals DOMException, Promise, self */
 
-//var argscheck = require('cordova/argscheck'),
-var exec = require('cordova/exec');
+var argscheck = require('cordova/argscheck'),
+    exec = require('cordova/exec');
 
 var ImageCapture = function(mediaStreamTrack) {
     this.track = mediaStreamTrack;
@@ -33,6 +33,7 @@ var ImageCapture = function(mediaStreamTrack) {
 };
 
 ImageCapture.prototype.takePhoto = function(photoSettings) {
+    var getValue = argscheck.getValue;
     var trackDesc = this.track.description;
     return new Promise(function(resolve, reject) {
         var success = function(info) {
@@ -69,19 +70,16 @@ ImageCapture.prototype.takePhoto = function(photoSettings) {
             reject(error);
         };
 
-        var options = {
-            redEyeReduction:false,
-            imageHeight: 1920,
-            imageWidth: 1080,
-            fillLightMode: "off"
-        };
-
-        if(photoSettings != undefined) {
-            options = photoSettings;
+        // setup default settings for takePhoto
+        if (!photoSettings) {
+            photoSettings = {};
         }
+        var redEyeReduction = getValue(photoSettings.redEyeReduction, false);
+        var imageHeight = getValue(photoSettings.imageHeight, 1920);
+        var imageWidth = getValue(photoSettings.imageWidth, 1080);
+        var fillLightMode = getValue(photoSettings.fillLightMode, "off");
 
-        var args = [options.redEyeReduction,
-            options.imageHeight, options.imageWidth, options.fillLightMode,
+        var args = [redEyeReduction, imageHeight, imageWidth, fillLightMode,
             trackDesc
         ];
 
