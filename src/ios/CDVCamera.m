@@ -150,13 +150,11 @@ static NSString* toBase64(NSData* data) {
 {
 
     self.redEyeReduction  = command.arguments[0];
-    NSString *imageHeight  = command.arguments[1];
-    NSString *imageWidth  = command.arguments[2];
-    if((imageHeight !=nil && imageHeight != (id)[NSNull null] ) && (imageHeight !=nil && imageHeight != (id)[NSNull null] )){
+    NSNumber* imageHeight = [command argumentAtIndex:1 withDefault:nil];
+    NSNumber* imageWidth = [command argumentAtIndex:2 withDefault:nil];
+    _targetSize = CGSizeMake(0, 0);
+    if ((imageHeight != nil) && (imageWidth != nil)) {
         _targetSize = CGSizeMake([imageWidth floatValue], [imageHeight floatValue]);
-    }
-    else{
-        _targetSize = CGSizeMake(0, 0);
     }
     NSString *fillLightMode  = command.arguments[3];
     NSString *cameraDirection  = command.arguments[4];
@@ -171,25 +169,19 @@ static NSString* toBase64(NSData* data) {
     }
     
     [inputDevice lockForConfiguration:nil];
-    if([fillLightMode isEqualToString:@"flash"]){
-        if([inputDevice isFlashModeSupported:AVCaptureFlashModeOn]){
-            [inputDevice setFlashMode:AVCaptureFlashModeOn];
-            // [inputDevice setTorchMode:AVCaptureTorchModeOn];
-        }
+    if([fillLightMode isEqualToString:@"flash"] && [inputDevice isFlashModeSupported:AVCaptureFlashModeOn]){
+        [inputDevice setFlashMode:AVCaptureFlashModeOn];
+        // [inputDevice setTorchMode:AVCaptureTorchModeOn];
     }
-    if([fillLightMode isEqualToString:@"off"]){
-        if([inputDevice isFlashModeSupported:AVCaptureFlashModeOff]){
-            [inputDevice setFlashMode:AVCaptureFlashModeOff];
-        }
+    else if([fillLightMode isEqualToString:@"off"] && [inputDevice isFlashModeSupported:AVCaptureFlashModeOff]){
+        [inputDevice setFlashMode:AVCaptureFlashModeOff];
     }
-    if([fillLightMode isEqualToString:@"auto"]){
-        if([inputDevice isFlashModeSupported:AVCaptureFlashModeAuto]){
-            [inputDevice setFlashMode:AVCaptureFlashModeAuto];
-            //  [inputDevice setTorchMode:AVCaptureTorchModeAuto];
-        }
+    else if([fillLightMode isEqualToString:@"auto"] && [inputDevice isFlashModeSupported:AVCaptureFlashModeAuto]){
+        [inputDevice setFlashMode:AVCaptureFlashModeAuto];
+        //  [inputDevice setTorchMode:AVCaptureTorchModeAuto];
     }
     [inputDevice unlockForConfiguration];
-
+    
     //store callback to use in delegate
     self.command = command;
     self.session = [[AVCaptureSession alloc] init];
