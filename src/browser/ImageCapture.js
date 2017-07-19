@@ -27,8 +27,12 @@ var ImageCapture = function(mediaStreamTrack) {
 };
 
 ImageCapture.prototype.takePhoto = function(photoSettings) {
-    this.nativeImageCapture.setOptions(photoSettings);
-    return this.nativeImageCapture.takePhoto();
+    if (this.nativeImageCapture.setOptions) {
+        this.nativeImageCapture.setOptions(photoSettings);
+        return this.nativeImageCapture.takePhoto();
+    } else {
+        return this.nativeImageCapture.takePhoto(photoSettings);
+    }
 };
 
 ImageCapture.prototype.getPhotoCapabilities = function() {
