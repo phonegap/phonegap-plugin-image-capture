@@ -36,13 +36,13 @@ describe('phonegap-plugin-image-capture', function () {
 
         it('constructor should fail if MediaStreamTrack kind is not video', function() {
             expect(function() {
-                var capture = new ImageCapture({kind: 'audio'});
+                new ImageCapture({kind: 'audio'});
             }).toThrow();
         });
 
         it('constructor should fail if MediaStreamTrack kind is missing', function() {
             expect(function() {
-                var capture = new ImageCapture({});
+                new ImageCapture({});
             }).toThrow();
         });
 
@@ -124,7 +124,7 @@ describe('phonegap-plugin-image-capture', function () {
             expect(p).toBeDefined();
             expect(typeof p === 'object').toBe(true);
             p.then(function(info){
-                
+
                 expect(p.redEyeReduction).toBeDefined();
                 expect(p.imageHeight).toBeDefined();
                 expect(p.imageWidth).toBeDefined();
@@ -144,7 +144,7 @@ describe('phonegap-plugin-image-capture', function () {
                 expect(typeof p.imageWidth.step).toBe('number');
                 var fillMode = ["auto","off","flash"];
                 expect(fillMode).toContain(p.fillLightMode);
-            })
+            });
         });
     });
 
@@ -155,7 +155,7 @@ describe('phonegap-plugin-image-capture', function () {
             expect(p).toBeDefined();
             expect(typeof p === 'object').toBe(true);
             p.then(function(info){
-                
+
                 expect(p.redEyeReduction).toBeDefined();
                 expect(p.imageHeight).toBeDefined();
                 expect(p.imageWidth).toBeDefined();
@@ -165,7 +165,7 @@ describe('phonegap-plugin-image-capture', function () {
                 expect(typeof p.imageWidth).toBe('number');
                 var fillMode = ["auto","off","flash"];
                 expect(fillMode).toContain(p.fillLightMode);
-            })
+            });
         });
     });
 
