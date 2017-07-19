@@ -199,6 +199,7 @@ static NSString* toBase64(NSData* data) {
     // self.movieOutput = [[AVCaptureMovieFileOutput alloc] init];
     [self.session addOutput:self.avCapture];
     AVCaptureConnection *connection = [self.avCapture connectionWithMediaType:AVMediaTypeVideo];
+    [connection setVideoOrientation:AVCaptureVideoOrientationPortrait];
     if (connection.active)
     {
             //connection is active
