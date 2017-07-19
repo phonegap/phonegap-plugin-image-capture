@@ -159,15 +159,15 @@ static NSString* toBase64(NSData* data) {
     NSString *fillLightMode  = command.arguments[3];
     NSString *cameraDirection  = command.arguments[4];
     AVCaptureDevice *inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    
+
     if([cameraDirection isEqualToString:@"frontcamera"]){
         inputDevice = [self getCaptureDevice:AVCaptureDevicePositionFront];
     }
     else if([cameraDirection isEqualToString:@"rearcamera"]){
         inputDevice = [self getCaptureDevice:AVCaptureDevicePositionBack];
-        
+
     }
-    
+
     [inputDevice lockForConfiguration:nil];
     if([fillLightMode isEqualToString:@"flash"] && [inputDevice isFlashModeSupported:AVCaptureFlashModeOn]){
         [inputDevice setFlashMode:AVCaptureFlashModeOn];
@@ -181,7 +181,7 @@ static NSString* toBase64(NSData* data) {
         //  [inputDevice setTorchMode:AVCaptureTorchModeAuto];
     }
     [inputDevice unlockForConfiguration];
-    
+
     //store callback to use in delegate
     self.command = command;
     self.session = [[AVCaptureSession alloc] init];
@@ -277,7 +277,7 @@ static NSString* toBase64(NSData* data) {
         NSLog(@"%f", scaledImage.size.height);
         NSLog(@"%f", scaledImage.size.width);
         //  red eye reduction -- more testing required
-        
+
         //        if(self.redEyeReduction == YES){
         //        CIImage *img = [CIImage imageWithData:data];
         //        NSArray* adjustments = [img autoAdjustmentFiltersWithOptions:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:kCIImageAutoAdjustEnhance]];
@@ -288,7 +288,7 @@ static NSString* toBase64(NSData* data) {
         //        UIImage *newimage = [[UIImage alloc] initWithCIImage:img];
         //        imageData = UIImageJPEGRepresentation(newimage, 1.0);
         //        }
-        
+
         NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:base64];
         [self.commandDelegate sendPluginResult:result callbackId:self.command.callbackId];
@@ -367,6 +367,46 @@ static NSString* toBase64(NSData* data) {
             }
             [photocapabilities setObject:flashMode forKey:@"fillLightMode"];
 
+            int max_w = 0;
+            int min_w = INT_MAX;
+            int max_h = 0;
+            int min_h = INT_MAX;
+
+            NSArray* availFormats=device.formats;
+            for (AVCaptureDeviceFormat* format in availFormats) {
+                CMVideoDimensions resolution = format.highResolutionStillImageDimensions;
+                int w = resolution.width;
+                int h = resolution.height;
+                NSLog(@"width=%d height=%d", w, h);
+
+                if (w > max_w) {
+                    max_w = w;
+                }
+                if (w < min_w) {
+                    min_w = w;
+                }
+                if (h > max_h) {
+                    max_h = h;
+                }
+                if (h < min_h) {
+                    min_h = h;
+                }
+            }
+
+            NSDictionary *imageHeight = @{
+                @"max": [NSNumber numberWithInteger:max_h],
+                @"min": [NSNumber numberWithInteger:min_h],
+                @"step": [NSNumber numberWithInteger:0]
+            };
+            [photocapabilities setObject:imageHeight forKey:@"imageHeight"];
+
+            NSDictionary *imageWeight = @{
+                @"max": [NSNumber numberWithInteger:max_w],
+                @"min": [NSNumber numberWithInteger:min_w],
+                @"step": [NSNumber numberWithInteger:0]
+            };
+            [photocapabilities setObject:imageWeight forKey:@"imageWeight"];
+
             CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:photocapabilities];
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
             return;
@@ -386,7 +426,7 @@ static NSString* toBase64(NSData* data) {
     else if([desc isEqualToString:@"rearcamera"]){
         device = [self getCaptureDevice:AVCaptureDevicePositionBack];;
     }
-    
+
     if([device flashMode] == AVCaptureFlashModeOff){
         [photoSettings setObject:@"off" forKey:@"fillLightMode"];
     }
@@ -399,12 +439,12 @@ static NSString* toBase64(NSData* data) {
     if((self.defaultSize.width > 0) && (self.defaultSize.height >0)){
         [photoSettings setObject:[NSNumber numberWithFloat:self.defaultSize.width] forKey:@"imageWidth"];
         [photoSettings setObject:[NSNumber numberWithFloat:self.defaultSize.height] forKey:@"imageHeight"];
-        
+
     }
-    
+
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:photoSettings];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    
+
 }
 
 - (NSInteger)integerValueForKey:(NSDictionary*)dict key:(NSString*)key defaultValue:(NSInteger)defaultValue
