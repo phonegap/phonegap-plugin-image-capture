@@ -400,12 +400,12 @@ static NSString* toBase64(NSData* data) {
             };
             [photocapabilities setObject:imageHeight forKey:@"imageHeight"];
 
-            NSDictionary *imageWeight = @{
+            NSDictionary *imageWidth = @{
                 @"max": [NSNumber numberWithInteger:max_w],
                 @"min": [NSNumber numberWithInteger:min_w],
                 @"step": [NSNumber numberWithInteger:0]
             };
-            [photocapabilities setObject:imageWeight forKey:@"imageWeight"];
+            [photocapabilities setObject:imageWidth forKey:@"imageWidth"];
 
             CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:photocapabilities];
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
