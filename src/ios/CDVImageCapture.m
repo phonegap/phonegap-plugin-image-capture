@@ -17,7 +17,7 @@
  under the License.
  */
 
-#import "CDVCamera.h"
+#import "CDVImageCapture.h"
 #import "CDVJpegHeaderWriter.h"
 #import "UIImage+CropScaleOrientation.h"
 #import <ImageIO/CGImageProperties.h>
@@ -91,7 +91,7 @@ static NSString* toBase64(NSData* data) {
 @end
 
 
-@interface CDVCamera ()
+@interface CDVImageCapture ()
 
 @property (readwrite, assign) BOOL hasPendingOperation;
 @property (assign, nonatomic) AVCaptureDevicePosition position;
@@ -108,7 +108,7 @@ static NSString* toBase64(NSData* data) {
 @end
 
 
-@implementation CDVCamera
+@implementation CDVImageCapture
 
 + (void)initialize
 {
@@ -242,11 +242,11 @@ static NSString* toBase64(NSData* data) {
         _previewLayer.frame = self.webView.bounds;
         [self.camview removeFromSuperview];
         [self.button removeFromSuperview];
-        
+
         // another way to achieve previewLyer Orientation
-        
+
         //   [ _previewLayer.connection setVideoOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
-        
+
         if (deviceOrientation == UIDeviceOrientationPortraitUpsideDown){
             [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationPortraitUpsideDown];
             //        _camview = [[UIView alloc]initWithFrame:CGRectMake(self.webView.frame.size.width-80,0,80,self.webView.frame.size.height)];
@@ -287,7 +287,7 @@ static NSString* toBase64(NSData* data) {
 
 -(void)takePhoto
 {
-    __weak CDVCamera* weakSelf = self;
+    __weak CDVImageCapture* weakSelf = self;
     [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
 
 }
@@ -767,7 +767,7 @@ static NSString* toBase64(NSData* data) {
 - (void)imagePickerController:(UIImagePickerController*)picker didFinishPickingMediaWithInfo:(NSDictionary*)info
 {
     __weak CDVCameraPicker* cameraPicker = (CDVCameraPicker*)picker;
-    __weak CDVCamera* weakSelf = self;
+    __weak CDVImageCapture* weakSelf = self;
 
     dispatch_block_t invoke = ^(void) {
         __block CDVPluginResult* result = nil;
@@ -811,7 +811,7 @@ static NSString* toBase64(NSData* data) {
 - (void)imagePickerControllerDidCancel:(UIImagePickerController*)picker
 {
     __weak CDVCameraPicker* cameraPicker = (CDVCameraPicker*)picker;
-    __weak CDVCamera* weakSelf = self;
+    __weak CDVImageCapture* weakSelf = self;
 
     dispatch_block_t invoke = ^ (void) {
         CDVPluginResult* result;

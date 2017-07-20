@@ -77,7 +77,7 @@
 
          <config-file target="config.xml" parent="/*">
              <feature name="ImageCapture">
-                 <param name="ios-package" value="CDVCamera" />
+                 <param name="ios-package" value="CDVImageCapture" />
              </feature>
              <preference name="CameraUsesGeolocation" value="false" />
          </config-file>
@@ -88,8 +88,8 @@
 
          <header-file src="src/ios/UIImage+CropScaleOrientation.h" />
          <source-file src="src/ios/UIImage+CropScaleOrientation.m" />
-         <header-file src="src/ios/CDVCamera.h" />
-         <source-file src="src/ios/CDVCamera.m" />
+         <header-file src="src/ios/CDVImageCapture.h" />
+         <source-file src="src/ios/CDVImageCapture.m" />
          <header-file src="src/ios/CDVJpegHeaderWriter.h" />
          <source-file src="src/ios/CDVJpegHeaderWriter.m" />
          <header-file src="src/ios/CDVExif.h" />
