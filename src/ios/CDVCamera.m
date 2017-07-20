@@ -104,6 +104,7 @@ static NSString* toBase64(NSData* data) {
 @property (nonatomic, assign) CGSize targetSize;
 @property (nonatomic, assign) CGSize defaultSize;
 @property (readwrite, assign) BOOL redEyeReduction;
+@property (assign, nonatomic) UIDeviceOrientation orientation;
 @end
 
 
@@ -208,6 +209,10 @@ static NSString* toBase64(NSData* data) {
         _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
         _previewLayer.frame = self.webView.bounds;
         [self.webView.layer addSublayer:self.previewLayer];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(orientationChanged)
+                                                     name:UIDeviceOrientationDidChangeNotification
+                                                   object:nil];
         [self.session startRunning];
         _button = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.button addTarget:self action:@selector(takePhoto) forControlEvents:UIControlEventTouchUpInside];
@@ -230,6 +235,43 @@ static NSString* toBase64(NSData* data) {
     //   [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
 
 
+}
+- (void) orientationChanged {
+    if([self.session isRunning]){
+        UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
+        _previewLayer.frame = self.webView.bounds;
+        [self.camview removeFromSuperview];
+        [self.button removeFromSuperview];
+        
+        // another way to achieve previewLyer Orientation
+        
+        //   [ _previewLayer.connection setVideoOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+        
+        if (deviceOrientation == UIDeviceOrientationPortraitUpsideDown){
+            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationPortraitUpsideDown];
+            //        _camview = [[UIView alloc]initWithFrame:CGRectMake(self.webView.frame.size.width-80,0,80,self.webView.frame.size.height)];
+        }
+        else if (deviceOrientation == UIDeviceOrientationPortrait){
+            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationPortrait];
+            _camview = [[UIView alloc]initWithFrame:CGRectMake(0, _previewLayer.frame.size.height-80, _previewLayer.frame.size.width, 80)];
+        }
+        else if (deviceOrientation == UIDeviceOrientationLandscapeLeft){
+            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
+            _camview = [[UIView alloc]initWithFrame:CGRectMake(_previewLayer.frame.size.width-80,0,80,_previewLayer.frame.size.height)];
+        }
+        else if(deviceOrientation == UIDeviceOrientationLandscapeRight){
+            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
+            _camview = [[UIView alloc]initWithFrame:CGRectMake(0,0,80,_previewLayer.frame.size.height)];
+        }
+        else {
+            // TODO  - should we reject other device orientations such as UIDeviceOrientationFaceDown ,UIDeviceOrientationFaceUp,UIDeviceOrientationUnknown
+        }
+        _orientation = deviceOrientation;
+        [self.camview setBackgroundColor:[UIColor blackColor]];
+        [self.webView addSubview:self.camview];
+        self.button.center = _camview.center;
+        [self.webView addSubview:self.button];
+    }
 }
 
 - (AVCaptureDevice *)getCaptureDevice:(int)facing
@@ -260,6 +302,16 @@ static NSString* toBase64(NSData* data) {
     if (photoSampleBuffer) {
         NSData *data = [AVCapturePhotoOutput JPEGPhotoDataRepresentationForJPEGSampleBuffer:photoSampleBuffer previewPhotoSampleBuffer:previewPhotoSampleBuffer];
         UIImage *image = [UIImage imageWithData:data];
+        if(self.orientation == UIDeviceOrientationLandscapeRight){
+            image = [[UIImage alloc] initWithCGImage: image.CGImage
+                                               scale: 1.0
+                                         orientation: UIImageOrientationDown];
+        }
+        else if(self.orientation == UIDeviceOrientationLandscapeLeft){
+            image = [[UIImage alloc] initWithCGImage: image.CGImage
+                                               scale: 1.0
+                                         orientation: UIImageOrientationUp];
+        }
         NSLog(@"%f", image.size.height);
         NSLog(@"%f", image.size.width);
         _defaultSize = CGSizeMake(image.size.width , image.size.height);
