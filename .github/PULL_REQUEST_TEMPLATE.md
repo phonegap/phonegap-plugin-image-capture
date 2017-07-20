@@ -1,22 +1,36 @@
-<!--
-Please make sure the checklist boxes are all checked before submitting the PR. The checklist
-is intended as a quick reference, for complete details please see our Contributor Guidelines:
+<!--- Provide a general summary of your changes in the Title above -->
 
-http://cordova.apache.org/contribute/contribute_guidelines.html
+## Description
+<!--- Describe your changes in detail -->
 
-Thanks!
--->
+## Related Issue
+<!--- This project only accepts pull requests related to open issues -->
+<!--- If suggesting a new feature or change, please discuss it in an issue first -->
+<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
+<!--- Please link to the issue here: -->
 
-### Platforms affected
+## Motivation and Context
+<!--- Why is this change required? What problem does it solve? -->
 
+## How Has This Been Tested?
+<!--- Please describe in detail how you tested your changes. -->
+<!--- Include details of your testing environment, and the tests you ran to -->
+<!--- see how your change affects other areas of the code, etc. -->
 
-### What does this PR do?
+## Screenshots (if appropriate):
 
+## Types of changes
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
 
-### What testing has been done on this change?
-
-
-### Checklist
-- [ ] [Reported an issue](http://cordova.apache.org/contribute/issues.html) in the JIRA database
-- [ ] Commit message follows the format: "CB-3232: (android) Fix bug with resolving file paths", where CB-xxxx is the JIRA ID & "android" is the platform affected.
-- [ ] Added automated test coverage as appropriate for this change.
+## Checklist:
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+- [ ] My code follows the code style of this project.
+- [ ] My change requires a change to the documentation.
+- [ ] I have updated the documentation accordingly.
+- [ ] I have read the **CONTRIBUTING** document.
+- [ ] I have added tests to cover my changes.
+- [ ] All new and existing tests passed.
