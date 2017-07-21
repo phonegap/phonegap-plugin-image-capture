@@ -21,6 +21,7 @@
 #import "CDVJpegHeaderWriter.h"
 #import "AppDelegate.h"
 #import "UIImage+CropScaleOrientation.h"
+#import "CameraViewController.h"
 #import <ImageIO/CGImageProperties.h>
 #import <AssetsLibrary/ALAssetRepresentation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -190,6 +191,7 @@ static NSString* toBase64(NSData* data) {
     //[self.session setSessionPreset:AVCaptureSessionPresetHigh];
 
     NSError *error;
+    /*
     AVCaptureDeviceInput *deviceInput = [[AVCaptureDeviceInput alloc] initWithDevice:inputDevice error:&error];
 
     if ([self.session canAddInput:deviceInput]) {
@@ -231,7 +233,13 @@ static NSString* toBase64(NSData* data) {
         NSLog(@"Connection is not active");
 
     }
+*/
+    __weak CDVImageCapture* weakSelf = self;
 
+    CameraViewController *cameraViewController = [[CameraViewController alloc] init];
+    [weakSelf.viewController presentViewController:cameraViewController animated:YES completion:^{
+        weakSelf.hasPendingOperation = NO;
+    }];
 
     //   [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
 
@@ -244,23 +252,23 @@ static NSString* toBase64(NSData* data) {
 }
 
 - (void) orientationChanged {
-    
+
     self.orientation = [UIDevice currentDevice].orientation;
     _previewLayer.frame = self.webView.bounds;
-    
+
     //  approach 2
-    
+
 //    if(self.orientationSet == NO)
 //        self.orientation = [UIDevice currentDevice].orientation;
-//    
+//
 //    _previewLayer.frame = self.webView.bounds;
 //    self.orientationSet = YES;
-    
+
     // calls orientationChanged() event again; flag used to store previous orientation
-    
+
 //    NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
 //    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
-//    
+//
 //    self.orientationSet = NO;
 //    ------approach 2 ends------
 
