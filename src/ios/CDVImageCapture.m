@@ -238,8 +238,7 @@ static NSString* toBase64(NSData* data) {
 
 }
 
--(void) restrictToPortraitMode:(BOOL) orientation
-{
+-(void) restrictToPortraitMode:(BOOL) orientation {
     AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
     appDelegate.restrictToPortrait = orientation;
 }
