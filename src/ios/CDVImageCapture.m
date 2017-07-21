@@ -19,6 +19,7 @@
 
 #import "CDVImageCapture.h"
 #import "CDVJpegHeaderWriter.h"
+#import "AppDelegate.h"
 #import "UIImage+CropScaleOrientation.h"
 #import <ImageIO/CGImageProperties.h>
 #import <AssetsLibrary/ALAssetRepresentation.h>
@@ -182,7 +183,7 @@ static NSString* toBase64(NSData* data) {
         //  [inputDevice setTorchMode:AVCaptureTorchModeAuto];
     }
     [inputDevice unlockForConfiguration];
-
+    [self restrictToPortraitMode:YES];
     //store callback to use in delegate
     self.command = command;
     self.session = [[AVCaptureSession alloc] init];
@@ -236,42 +237,69 @@ static NSString* toBase64(NSData* data) {
 
 
 }
+
+-(void) restrictToPortraitMode:(BOOL) orientation
+{
+    AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
+    appDelegate.restrictToPortrait = orientation;
+}
+
 - (void) orientationChanged {
-    if([self.session isRunning]){
-        UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
-        _previewLayer.frame = self.webView.bounds;
-        [self.camview removeFromSuperview];
-        [self.button removeFromSuperview];
+    
+    self.orientation = [UIDevice currentDevice].orientation;
+    _previewLayer.frame = self.webView.bounds;
+    
+    //  approach 2
+    
+//    if(self.orientationSet == NO)
+//        self.orientation = [UIDevice currentDevice].orientation;
+//    
+//    _previewLayer.frame = self.webView.bounds;
+//    self.orientationSet = YES;
+    
+    // calls orientationChanged() event again; flag used to store previous orientation
+    
+//    NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
+//    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+//    
+//    self.orientationSet = NO;
+//    ------approach 2 ends------
 
-        // another way to achieve previewLyer Orientation
-
-        //   [ _previewLayer.connection setVideoOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
-
-        if (deviceOrientation == UIDeviceOrientationPortraitUpsideDown){
-            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationPortraitUpsideDown];
-            //        _camview = [[UIView alloc]initWithFrame:CGRectMake(self.webView.frame.size.width-80,0,80,self.webView.frame.size.height)];
-        }
-        else if (deviceOrientation == UIDeviceOrientationPortrait){
-            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationPortrait];
-            _camview = [[UIView alloc]initWithFrame:CGRectMake(0, _previewLayer.frame.size.height-80, _previewLayer.frame.size.width, 80)];
-        }
-        else if (deviceOrientation == UIDeviceOrientationLandscapeLeft){
-            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
-            _camview = [[UIView alloc]initWithFrame:CGRectMake(_previewLayer.frame.size.width-80,0,80,_previewLayer.frame.size.height)];
-        }
-        else if(deviceOrientation == UIDeviceOrientationLandscapeRight){
-            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
-            _camview = [[UIView alloc]initWithFrame:CGRectMake(0,0,80,_previewLayer.frame.size.height)];
-        }
-        else {
-            // TODO  - should we reject other device orientations such as UIDeviceOrientationFaceDown ,UIDeviceOrientationFaceUp,UIDeviceOrientationUnknown
-        }
-        _orientation = deviceOrientation;
-        [self.camview setBackgroundColor:[UIColor blackColor]];
-        [self.webView addSubview:self.camview];
-        self.button.center = _camview.center;
-        [self.webView addSubview:self.button];
-    }
+//    if([self.session isRunning]){
+//        UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
+//        _previewLayer.frame = self.webView.bounds;
+//        [self.camview removeFromSuperview];
+//        [self.button removeFromSuperview];
+//
+//        // another way to achieve previewLyer Orientation
+//
+//        //   [ _previewLayer.connection setVideoOrientation:[[UIApplication sharedApplication] statusBarOrientation]];
+//
+//        if (deviceOrientation == UIDeviceOrientationPortraitUpsideDown){
+//            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationPortraitUpsideDown];
+//            //        _camview = [[UIView alloc]initWithFrame:CGRectMake(self.webView.frame.size.width-80,0,80,self.webView.frame.size.height)];
+//        }
+//        else if (deviceOrientation == UIDeviceOrientationPortrait){
+//            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationPortrait];
+//            _camview = [[UIView alloc]initWithFrame:CGRectMake(0, _previewLayer.frame.size.height-80, _previewLayer.frame.size.width, 80)];
+//        }
+//        else if (deviceOrientation == UIDeviceOrientationLandscapeLeft){
+//            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationLandscapeRight];
+//            _camview = [[UIView alloc]initWithFrame:CGRectMake(_previewLayer.frame.size.width-80,0,80,_previewLayer.frame.size.height)];
+//        }
+//        else if(deviceOrientation == UIDeviceOrientationLandscapeRight){
+//            [_previewLayer.connection setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
+//            _camview = [[UIView alloc]initWithFrame:CGRectMake(0,0,80,_previewLayer.frame.size.height)];
+//        }
+//        else {
+//            // TODO  - should we reject other device orientations such as UIDeviceOrientationFaceDown ,UIDeviceOrientationFaceUp,UIDeviceOrientationUnknown
+//        }
+//        _orientation = deviceOrientation;
+//        [self.camview setBackgroundColor:[UIColor blackColor]];
+//        [self.webView addSubview:self.camview];
+//        self.button.center = _camview.center;
+//        [self.webView addSubview:self.button];
+//    }
 }
 
 - (AVCaptureDevice *)getCaptureDevice:(int)facing
@@ -288,6 +316,7 @@ static NSString* toBase64(NSData* data) {
 -(void)takePhoto
 {
     __weak CDVImageCapture* weakSelf = self;
+    [self restrictToPortraitMode:NO];
     [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
 
 }
