@@ -247,6 +247,7 @@ static NSString* toBase64(NSData* data) {
     else if([fillLightMode isEqualToString:@"auto"]){
         cameraViewController.flashModeValue = AVCaptureFlashModeAuto;
     }
+    cameraViewController.imageCaptureInterface = self;
     [weakSelf.viewController presentViewController:cameraViewController animated:YES completion:^{
         weakSelf.hasPendingOperation = NO;
     }];
@@ -254,6 +255,30 @@ static NSString* toBase64(NSData* data) {
     //   [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
 
 
+}
+
+- (void)receiveImage:(UIImage *)image
+{
+    NSLog(@"%f", image.size.height);
+    NSLog(@"%f", image.size.width);
+    _defaultSize = CGSizeMake(image.size.width , image.size.height);
+    NSData *imageData = UIImageJPEGRepresentation(image, 1.0);
+    UIImage* scaledImage = nil;
+    if((self.targetSize.width > 0) && (self.targetSize.height >0)){
+        // scaledImage = [image imageByScalingNotCroppingForSize:self.targetSize];
+        if (CGSizeEqualToSize(image.size, self.targetSize) == NO) {
+            UIGraphicsBeginImageContext( self.targetSize);
+            [image drawInRect:CGRectMake(0,0,self.targetSize.width,self.targetSize.height)];
+            scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            imageData = UIImageJPEGRepresentation(scaledImage, 1.0);
+        }
+    }
+    NSLog(@"%f", scaledImage.size.height);
+    NSLog(@"%f", scaledImage.size.width);
+    NSString *base64 = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:base64];
+    [self.commandDelegate sendPluginResult:result callbackId:self.command.callbackId];
 }
 
 - (void) orientationChanged {

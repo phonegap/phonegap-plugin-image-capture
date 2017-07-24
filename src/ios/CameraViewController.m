@@ -422,6 +422,7 @@
 - (void)handleImage:(UIImage *)image
 {
     NSLog(@"in handle image");
+    [self.imageCaptureInterface receiveImage:image];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
