@@ -161,33 +161,33 @@ static NSString* toBase64(NSData* data) {
     }
     NSString *fillLightMode  = command.arguments[3];
     NSString *cameraDirection  = command.arguments[4];
-    AVCaptureDevice *inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-
-    if([cameraDirection isEqualToString:@"frontcamera"]){
-        inputDevice = [self getCaptureDevice:AVCaptureDevicePositionFront];
-    }
-    else if([cameraDirection isEqualToString:@"rearcamera"]){
-        inputDevice = [self getCaptureDevice:AVCaptureDevicePositionBack];
-
-    }
-
-    [inputDevice lockForConfiguration:nil];
-    if([fillLightMode isEqualToString:@"flash"] && [inputDevice isFlashModeSupported:AVCaptureFlashModeOn]){
-        [inputDevice setFlashMode:AVCaptureFlashModeOn];
-        // [inputDevice setTorchMode:AVCaptureTorchModeOn];
-    }
-    else if([fillLightMode isEqualToString:@"off"] && [inputDevice isFlashModeSupported:AVCaptureFlashModeOff]){
-        [inputDevice setFlashMode:AVCaptureFlashModeOff];
-    }
-    else if([fillLightMode isEqualToString:@"auto"] && [inputDevice isFlashModeSupported:AVCaptureFlashModeAuto]){
-        [inputDevice setFlashMode:AVCaptureFlashModeAuto];
-        //  [inputDevice setTorchMode:AVCaptureTorchModeAuto];
-    }
-    [inputDevice unlockForConfiguration];
-    [self restrictToPortraitMode:YES];
+//    AVCaptureDevice *inputDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+//
+//    if([cameraDirection isEqualToString:@"frontcamera"]){
+//        inputDevice = [self getCaptureDevice:AVCaptureDevicePositionFront];
+//    }
+//    else if([cameraDirection isEqualToString:@"rearcamera"]){
+//        inputDevice = [self getCaptureDevice:AVCaptureDevicePositionBack];
+//
+//    }
+//
+//    [inputDevice lockForConfiguration:nil];
+//    if([fillLightMode isEqualToString:@"flash"] && [inputDevice isFlashModeSupported:AVCaptureFlashModeOn]){
+//        [inputDevice setFlashMode:AVCaptureFlashModeOn];
+//        // [inputDevice setTorchMode:AVCaptureTorchModeOn];
+//    }
+//    else if([fillLightMode isEqualToString:@"off"] && [inputDevice isFlashModeSupported:AVCaptureFlashModeOff]){
+//        [inputDevice setFlashMode:AVCaptureFlashModeOff];
+//    }
+//    else if([fillLightMode isEqualToString:@"auto"] && [inputDevice isFlashModeSupported:AVCaptureFlashModeAuto]){
+//        [inputDevice setFlashMode:AVCaptureFlashModeAuto];
+//        //  [inputDevice setTorchMode:AVCaptureTorchModeAuto];
+//    }
+//    [inputDevice unlockForConfiguration];
+//    [self restrictToPortraitMode:YES];
     //store callback to use in delegate
     self.command = command;
-    self.session = [[AVCaptureSession alloc] init];
+ //   self.session = [[AVCaptureSession alloc] init];
     //[self.session setSessionPreset:AVCaptureSessionPresetHigh];
 
     NSError *error;
@@ -237,6 +237,16 @@ static NSString* toBase64(NSData* data) {
     __weak CDVImageCapture* weakSelf = self;
 
     CameraViewController *cameraViewController = [[CameraViewController alloc] init];
+    cameraViewController.camDirection = cameraDirection;
+    if([fillLightMode isEqualToString:@"flash"]){
+        cameraViewController.flashModeValue = AVCaptureFlashModeOn;
+    }
+    else if([fillLightMode isEqualToString:@"off"]){
+        cameraViewController.flashModeValue = AVCaptureFlashModeOff;
+    }
+    else if([fillLightMode isEqualToString:@"auto"]){
+        cameraViewController.flashModeValue = AVCaptureFlashModeAuto;
+    }
     [weakSelf.viewController presentViewController:cameraViewController animated:YES completion:^{
         weakSelf.hasPendingOperation = NO;
     }];
@@ -244,11 +254,6 @@ static NSString* toBase64(NSData* data) {
     //   [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
 
 
-}
-
--(void) restrictToPortraitMode:(BOOL) orientation {
-    AppDelegate* appDelegate = (AppDelegate*)[UIApplication sharedApplication].delegate;
-    appDelegate.restrictToPortrait = orientation;
 }
 
 - (void) orientationChanged {
@@ -323,7 +328,6 @@ static NSString* toBase64(NSData* data) {
 -(void)takePhoto
 {
     __weak CDVImageCapture* weakSelf = self;
-    [self restrictToPortraitMode:NO];
     [self.avCapture capturePhotoWithSettings:_avSettings delegate:weakSelf];
 
 }

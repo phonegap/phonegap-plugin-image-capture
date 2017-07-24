@@ -238,6 +238,10 @@
         self.session = [[AVCaptureSession alloc] init];
         self.session.sessionPreset = AVCaptureSessionPresetPhoto;
         AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+        if([self.camDirection isEqualToString:@"frontcamera"]){
+            device = [self frontCamera];
+        }
+        _flashMode = (AVCaptureFlashMode)self.flashModeValue;
         NSError *error = nil;
 
         AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
@@ -253,8 +257,8 @@
                 device.focusMode = AVCaptureFocusModeContinuousAutoFocus;
             }
 
-            if ([device isFlashModeSupported:AVCaptureFlashModeAuto]) {
-                device.flashMode = AVCaptureFlashModeAuto;
+            if ([device isFlashModeSupported:self.flashMode]) {
+                device.flashMode = self.flashMode;
             } else {
                 device.flashMode = AVCaptureFlashModeOff;
             }
@@ -458,7 +462,7 @@
 
         AVCaptureDevice *newCamera = nil;
 
-        if (input.device.position == AVCaptureDevicePositionBack) {
+        if ([self.camDirection isEqualToString:@"rearcamera"]) {
             newCamera = [self frontCamera];
         } else {
             newCamera = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];

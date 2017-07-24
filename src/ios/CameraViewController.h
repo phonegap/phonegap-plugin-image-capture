@@ -10,4 +10,6 @@
 
 
 @interface CameraViewController : UIViewController
+@property (assign, nonatomic) NSString *camDirection;
+@property (assign, nonatomic) NSInteger flashModeValue;
 @end
