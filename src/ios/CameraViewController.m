@@ -1,7 +1,5 @@
 #import "CameraViewController.h"
-//#import "ImageViewerViewController.h"
 #import <AVFoundation/AVFoundation.h>
-//#import <PureLayout/PureLayout.h>
 
 
 @interface CameraViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
@@ -419,13 +417,8 @@
  */
 - (void)handleImage:(UIImage *)image
 {
-    /*
-    ImageViewerViewController *viewController = [[ImageViewerViewController alloc] initWithImage:image];
-    viewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneBarButtonWasTouched:)];
-
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
-    [self presentViewController:navController animated:YES completion:nil];
-     */
+    NSLog(@"in handle image");
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 
