@@ -90,7 +90,6 @@ typedef NSUInteger CDVMediaType;
 @property (strong) NSMutableDictionary *metadata;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong) NSData* data;
-@property (assign, nonatomic) NSInteger flashMode;
 @property (strong, nonatomic) CDVInvokedUrlCommand * command;
 
 /*
