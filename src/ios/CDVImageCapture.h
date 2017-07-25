@@ -103,6 +103,7 @@ typedef NSUInteger CDVMediaType;
  *	quality: integer between 1 and 100
  */
 - (void)takePicture:(CDVInvokedUrlCommand*)command;
+- (void)receiveImage:(UIImage*)image;
 - (void)cleanup:(CDVInvokedUrlCommand*)command;
 - (void)repositionPopover:(CDVInvokedUrlCommand*)command;
 - (void)getPhotoCapabilities:(CDVInvokedUrlCommand*)command;
