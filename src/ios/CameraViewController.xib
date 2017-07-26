@@ -26,14 +26,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PPI-1U-rNc">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="613"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="640"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BZp-h5-AmJ">
-                    <rect key="frame" x="0.0" y="613" width="414" height="123"/>
+                    <rect key="frame" x="0.0" y="640" width="414" height="96"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VGJ-Mc-QDp" customClass="JPSCameraButton">
-                            <rect key="frame" x="174" y="42" width="66" height="66"/>
+                            <rect key="frame" x="174" y="15" width="66" height="66"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="66" id="bf4-LR-WSO"/>
                                 <constraint firstAttribute="width" constant="66" id="tpq-lf-gwu"/>
@@ -43,7 +43,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ap0-9j-R4K">
-                            <rect key="frame" x="354" y="53" width="30" height="44"/>
+                            <rect key="frame" x="354" y="26" width="30" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="kNQ-my-0uh"/>
                             </constraints>
@@ -60,7 +60,7 @@
                     <constraints>
                         <constraint firstItem="Ap0-9j-R4K" firstAttribute="centerY" secondItem="VGJ-Mc-QDp" secondAttribute="centerY" id="JgF-fp-AUF"/>
                         <constraint firstItem="VGJ-Mc-QDp" firstAttribute="centerX" secondItem="BZp-h5-AmJ" secondAttribute="centerX" id="kia-YU-hQL"/>
-                        <constraint firstAttribute="height" constant="123" id="qIF-YH-5Ab"/>
+                        <constraint firstAttribute="height" constant="96" id="qIF-YH-5Ab"/>
                         <constraint firstAttribute="bottom" secondItem="VGJ-Mc-QDp" secondAttribute="bottom" constant="15" id="rBG-dv-9Fu"/>
                         <constraint firstAttribute="trailing" secondItem="Ap0-9j-R4K" secondAttribute="trailing" constant="30" id="vs6-7o-MO3"/>
                     </constraints>
