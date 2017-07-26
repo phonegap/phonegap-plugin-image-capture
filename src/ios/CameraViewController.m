@@ -198,10 +198,10 @@
             
             if ([device isFlashModeSupported:self.flashMode]) {
                 device.flashMode = self.flashMode;
-            } else {
+            } else if( [device isFlashModeSupported:AVCaptureFlashModeOff]){
                 device.flashMode = AVCaptureFlashModeOff;
+                self.flashMode = device.flashMode;
             }
-            self.flashMode = device.flashMode;
         }
         [device unlockForConfiguration];
         
