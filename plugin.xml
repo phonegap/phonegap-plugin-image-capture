@@ -93,16 +93,9 @@
          <source-file src="src/ios/JPSCameraButton.m" />
          <header-file src="src/ios/UIImage+DrawBlock.h" />
          <source-file src="src/ios/UIImage+DrawBlock.m" />
-         <header-file src="src/ios/UIImage+CropScaleOrientation.h" />
-         <source-file src="src/ios/UIImage+CropScaleOrientation.m" />
          <header-file src="src/ios/CDVImageCapture.h" />
          <source-file src="src/ios/CDVImageCapture.m" />
-         <header-file src="src/ios/CDVJpegHeaderWriter.h" />
-         <source-file src="src/ios/CDVJpegHeaderWriter.m" />
-         <header-file src="src/ios/CDVExif.h" />
          <framework src="ImageIO.framework" weak="true" />
-         <framework src="CoreLocation.framework" />
-         <framework src="CoreGraphics.framework" />
          <framework src="AssetsLibrary.framework" />
          <framework src="MobileCoreServices.framework" />
          <framework src="CoreGraphics.framework" />
