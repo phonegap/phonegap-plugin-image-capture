@@ -3,12 +3,10 @@
 
 
 @interface CameraViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
-@property (weak, nonatomic) IBOutlet UIView *topBarView;
 @property (weak, nonatomic) IBOutlet UIView *bottomBarView;
 @property (weak, nonatomic) IBOutlet UIView *cameraContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *takePhotoButton;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *cameraViewTopConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *cameraViewBottomConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomBarHeightConstraint;
 @property (strong, nonatomic) UIVisualEffectView *blurView;
@@ -51,7 +49,6 @@
     
     // 3.5" devices have the top and bottom bars over the camera view
     if (CGRectGetHeight([UIScreen mainScreen].bounds) == 480.0f) {
-        self.cameraViewTopConstraint.constant = -CGRectGetHeight(self.topBarView.frame);
         self.cameraViewBottomConstraint.constant = -CGRectGetHeight(self.bottomBarView.frame);
         [self.cameraContainerView layoutIfNeeded];
     }
@@ -124,17 +121,6 @@
     
     
 }
-
-
-#pragma mark -
-#pragma mark UI
-
-/**
- *  @brief Toggle the visibility of the flash mode buttons and camera button. Animated
- */
-
-
-
 
 /**
  *  @brief Rotate the UI elements based on the device orientation. Animated
@@ -246,9 +232,6 @@
         [self.session startRunning];
         if ([[self currentDevice] hasFlash]) {
             [self updateFlashlightState];
-        }
-        if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront] &&
-            [UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceRear]) {
         }
     });
 }
