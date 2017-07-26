@@ -191,11 +191,6 @@
         // Turn on point autofocus for middle of view
         [device lockForConfiguration:&error];
         if (!error) {
-            if ([device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus]) {
-                device.focusPointOfInterest = CGPointMake(0.5,0.5);
-                device.focusMode = AVCaptureFocusModeContinuousAutoFocus;
-            }
-            
             if ([device isFlashModeSupported:self.flashMode]) {
                 device.flashMode = self.flashMode;
             } else if( [device isFlashModeSupported:AVCaptureFlashModeOff]){
