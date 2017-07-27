@@ -82,10 +82,6 @@
              <preference name="CameraUsesGeolocation" value="false" />
          </config-file>
 
-         <js-module src="www/ios/CameraPopoverHandle.js" name="CameraPopoverHandle">
-            <clobbers target="CameraPopoverHandle" />
-         </js-module>
-
          <header-file src="src/ios/CameraViewController.h" />
          <source-file src="src/ios/CameraViewController.m" />
          <resource-file src="src/ios/CameraViewController.xib" />
