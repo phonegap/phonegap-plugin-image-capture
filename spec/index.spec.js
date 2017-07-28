@@ -149,13 +149,12 @@ describe('phonegap-plugin-image-capture', function () {
     });
 
     describe('getPhotoSettings', function () {
-        it('should return a Promise', function () {
+        it('should return a Promise with default PhotoSettings', function () {
             var capture = new ImageCapture({ kind: 'video'});
             var p = capture.getPhotoSettings();
             expect(p).toBeDefined();
             expect(typeof p === 'object').toBe(true);
             p.then(function(info){
-
                 expect(p.redEyeReduction).toBeDefined();
                 expect(p.imageHeight).toBeDefined();
                 expect(p.imageWidth).toBeDefined();
@@ -170,11 +169,19 @@ describe('phonegap-plugin-image-capture', function () {
     });
 
     describe('grabFrame', function () {
-        it('should return a Promise', function () {
+        it('should return a rejected Promise', function (done) {
             var capture = new ImageCapture({ kind: 'video'});
             var p = capture.grabFrame();
             expect(p).toBeDefined();
             expect(typeof p === 'object').toBe(true);
+            p.then(function() {
+                done(new Error('Promise should not get resolved'));
+            }, function(reason) {
+                expect(typeof reason === 'object').toBe(true);
+                console.log(reason);
+                done(); // Success
+            });
         });
     });
+
 });
