@@ -69,6 +69,16 @@ describe('phonegap-plugin-image-capture', function () {
             expect(capture.grabFrame).toBeDefined();
             expect(typeof capture.grabFrame === 'function').toBe(true);
         });
+        it('should contain a getPhotoSettings function', function () {
+            var capture = new ImageCapture({ kind: 'video'});
+            expect(capture.getPhotoSettings).toBeDefined();
+            expect(typeof capture.getPhotoSettings === 'function').toBe(true);
+        });
+        it('should contain a setOptions function', function () {
+            var capture = new ImageCapture({ kind: 'video'});
+            expect(capture.setOptions).toBeDefined();
+            expect(typeof capture.setOptions === 'function').toBe(true);
+        });
     });
 
     describe('takePhoto', function () {
@@ -125,25 +135,25 @@ describe('phonegap-plugin-image-capture', function () {
             expect(typeof p === 'object').toBe(true);
             p.then(function(info){
 
-                expect(p.redEyeReduction).toBeDefined();
-                expect(p.imageHeight).toBeDefined();
-                expect(p.imageWidth).toBeDefined();
-                expect(p.fillLightMode).toBeDefined();
-                expect(p.redEyeReduction).toBe('boolean');
-                expect(p.imageHeight.max).toBeDefined();
-                expect(p.imageHeight.min).toBeDefined();
-                expect(p.imageHeight.step).toBeDefined();
-                expect(typeof p.imageHeight.max).toBe('number');
-                expect(typeof p.imageHeight.min).toBe('number');
-                expect(typeof p.imageHeight.step).toBe('number');
-                expect(p.imageWidth.max).toBeDefined();
-                expect(p.imageWidth.min).toBeDefined();
-                expect(p.imageWidth.step).toBeDefined();
-                expect(typeof p.imageWidth.max).toBe('number');
-                expect(typeof p.imageWidth.min).toBe('number');
-                expect(typeof p.imageWidth.step).toBe('number');
+                expect(info.redEyeReduction).toBeDefined();
+                expect(info.imageHeight).toBeDefined();
+                expect(info.imageWidth).toBeDefined();
+                expect(info.fillLightMode).toBeDefined();
+                expect(info.redEyeReduction).toBe('boolean');
+                expect(info.imageHeight.max).toBeDefined();
+                expect(info.imageHeight.min).toBeDefined();
+                expect(info.imageHeight.step).toBeDefined();
+                expect(typeof info.imageHeight.max).toBe('number');
+                expect(typeof info.imageHeight.min).toBe('number');
+                expect(typeof info.imageHeight.step).toBe('number');
+                expect(info.imageWidth.max).toBeDefined();
+                expect(info.imageWidth.min).toBeDefined();
+                expect(info.imageWidth.step).toBeDefined();
+                expect(typeof info.imageWidth.max).toBe('number');
+                expect(typeof info.imageWidth.min).toBe('number');
+                expect(typeof info.imageWidth.step).toBe('number');
                 var fillMode = ["auto","off","flash"];
-                expect(fillMode).toContain(p.fillLightMode);
+                expect(fillMode).toContain(info.fillLightMode);
             });
         });
     });
@@ -155,15 +165,15 @@ describe('phonegap-plugin-image-capture', function () {
             expect(p).toBeDefined();
             expect(typeof p === 'object').toBe(true);
             p.then(function(info){
-                expect(p.redEyeReduction).toBeDefined();
-                expect(p.imageHeight).toBeDefined();
-                expect(p.imageWidth).toBeDefined();
-                expect(p.fillLightMode).toBeDefined();
-                expect(p.redEyeReduction).toBe('boolean');
-                expect(typeof p.imageHeight).toBe('number');
-                expect(typeof p.imageWidth).toBe('number');
+                expect(info.redEyeReduction).toBeDefined();
+                expect(info.imageHeight).toBeDefined();
+                expect(info.imageWidth).toBeDefined();
+                expect(info.fillLightMode).toBeDefined();
+                expect(info.redEyeReduction).toBe('boolean');
+                expect(typeof info.imageHeight).toBe('number');
+                expect(typeof info.imageWidth).toBe('number');
                 var fillMode = ["auto","off","flash"];
-                expect(fillMode).toContain(p.fillLightMode);
+                expect(fillMode).toContain(info.fillLightMode);
             });
         });
     });
@@ -181,6 +191,20 @@ describe('phonegap-plugin-image-capture', function () {
                 console.log(reason);
                 done(); // Success
             });
+        });
+    });
+
+    describe('setOptions', function () {
+        it('should return a Promise', function () {
+            var capture = new ImageCapture({ kind: 'video'});
+            var photoSettings = {
+                imageHeight : 800,
+                imageWidth : 600
+            };
+            var p = capture.setOptions(photoSettings);
+            expect(p).toBeDefined();
+            expect(typeof p === 'object').toBe(true);
+
         });
     });
 
