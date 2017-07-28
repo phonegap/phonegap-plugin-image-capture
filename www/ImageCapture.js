@@ -118,7 +118,10 @@ ImageCapture.prototype.getPhotoSettings = function() {
 
 ImageCapture.prototype.grabFrame = function() {
     return new Promise(function(resolve, reject) {
-
+        var name = "UnknownError";
+        var description = "";
+        var domException = new DOMException(description,name);
+        reject(domException);
     });
 };
 ImageCapture.prototype.setOptions = function(photoSettings) {

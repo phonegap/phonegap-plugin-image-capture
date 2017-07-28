@@ -103,33 +103,6 @@ If you don't pass the variable, the plugin will add an empty string as value.
 
 ---
 
-<a name="module_CameraPopoverHandle"></a>
-
-## CameraPopoverHandle
-A handle to an image picker popover.
-
-__Supported Platforms__
-
-- iOS
-
-**Example**  
-```js
-navigator.camera.getPicture(onSuccess, onFail,
-{
-    destinationType: Camera.DestinationType.FILE_URI,
-    sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-    popoverOptions: new CameraPopoverOptions(300, 300, 100, 100, Camera.PopoverArrowDirection.ARROW_ANY)
-});
-
-// Reposition the popover if the orientation changes.
-window.onorientationchange = function() {
-    var cameraPopoverHandle = new CameraPopoverHandle();
-    var cameraPopoverOptions = new CameraPopoverOptions(0, 0, 100, 100, Camera.PopoverArrowDirection.ARROW_ANY);
-    cameraPopoverHandle.setPosition(cameraPopoverOptions);
-}
-```
----
-
 
 ## `camera.getPicture` Errata
 
