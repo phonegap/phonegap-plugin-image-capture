@@ -37,8 +37,6 @@ ImageCapture.prototype.takePhoto = function(photoSettings) {
     var trackDesc = this.track.description;
     return new Promise(function(resolve, reject) {
         var success = function(info) {
-            console.log('success' + info);
-
             // if fetch exists & it is a native implementation
             // use it as it is much faster
             if (self.fetch && (/\{\s*\[native code\]\s*\}/).test('' + fetch)) {

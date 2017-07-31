@@ -1,9 +1,9 @@
 {
-  "name": "cordova-plugin-camera-tests",
-  "version": "2.4.1-dev",
+  "name": "phonegap-plugin-image-capture-tests",
+  "version": "0.0.1",
   "description": "",
   "cordova": {
-    "id": "cordova-plugin-camera-tests",
+    "id": "phonegap-plugin-image-capture-tests",
     "platforms": []
   },
   "keywords": [
