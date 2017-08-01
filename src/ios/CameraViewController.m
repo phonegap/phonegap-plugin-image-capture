@@ -1,3 +1,11 @@
+//
+//  CameraViewController.m
+//  Custom Camera
+//
+//  Created by Chris Leversuch on 30/06/2016.
+//  Copyright © 2016 Brightec. All rights reserved.
+//
+
 #import "CameraViewController.h"
 #import <AVFoundation/AVFoundation.h>
 
@@ -27,32 +35,32 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     // Initialize the capture queue
     self.captureQueue = [[NSOperationQueue alloc] init];
-    
+
     // Initialise the blur effect used when switching between cameras
     UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
     self.blurView = [[UIVisualEffectView alloc] initWithEffect:effect];
-    
+
     // Listen for orientation changes so that we can update the UI
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(orientationChanged:)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
-    
+
     // 3.5" and 4" devices have a smaller bottom bar
     if (CGRectGetHeight([UIScreen mainScreen].bounds) <= 568.0f) {
         self.bottomBarHeightConstraint.constant = 91.0f;
         [self.bottomBarView layoutIfNeeded];
     }
-    
+
     // 3.5" devices have the top and bottom bars over the camera view
     if (CGRectGetHeight([UIScreen mainScreen].bounds) == 480.0f) {
         self.cameraViewBottomConstraint.constant = -CGRectGetHeight(self.bottomBarView.frame);
         [self.cameraContainerView layoutIfNeeded];
     }
-    
+
     [self updateOrientation];
 }
 
@@ -60,7 +68,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     [self enableCapture];
 }
 
@@ -68,7 +76,7 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
+
     [self.captureQueue cancelAllOperations];
     [self.capturePreviewLayer removeFromSuperlayer];
     for (AVCaptureInput *input in self.session.inputs) {
@@ -85,7 +93,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    
+
     self.capturePreviewLayer.frame = self.cameraContainerView.bounds;
 }
 
@@ -118,8 +126,8 @@
 - (void)setFlashMode:(AVCaptureFlashMode)flashMode
 {
     _flashMode = flashMode;
-    
-    
+
+
 }
 
 /**
@@ -128,26 +136,26 @@
 - (void)updateOrientation
 {
     UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
-    
+
     CGFloat angle;
     switch (deviceOrientation) {
         case UIDeviceOrientationPortraitUpsideDown:
             angle = M_PI;
             break;
-            
+
         case UIDeviceOrientationLandscapeLeft:
             angle = M_PI_2;
             break;
-            
+
         case UIDeviceOrientationLandscapeRight:
             angle = - M_PI_2;
             break;
-            
+
         default:
             angle = 0;
             break;
     }
-    
+
     [UIView animateWithDuration:.3 animations:^{
         self.takePhotoButton.transform = CGAffineTransformMakeRotation(angle);
         self.cancelButton.transform = CGAffineTransformMakeRotation(angle);
@@ -161,7 +169,7 @@
 - (void)enableCapture
 {
     if (self.session) return;
-    
+
     NSBlockOperation *operation = [self captureOperation];
     operation.completionBlock = ^{
         [self operationCompleted];
@@ -182,12 +190,12 @@
         }
         _flashMode = (AVCaptureFlashMode)self.flashModeValue;
         NSError *error = nil;
-        
+
         AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
         if (!input) return;
-        
+
         [self.session addInput:input];
-        
+
         // Turn on point autofocus for middle of view
         [device lockForConfiguration:&error];
         if (!error) {
@@ -199,11 +207,11 @@
             }
         }
         [device unlockForConfiguration];
-        
+
         self.capturePreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
         self.capturePreviewLayer.frame = self.cameraContainerView.bounds;
         self.capturePreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        
+
         // Still Image Output
         AVCaptureStillImageOutput *stillOutput = [[AVCaptureStillImageOutput alloc] init];
         stillOutput.outputSettings = @{AVVideoCodecKey: AVVideoCodecJPEG};
@@ -267,22 +275,22 @@
 {
     UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
     UIImageOrientation imageOrientation;
-    
+
     AVCaptureDeviceInput *input = self.session.inputs.firstObject;
     if (input.device.position == AVCaptureDevicePositionBack) {
         switch (deviceOrientation) {
             case UIDeviceOrientationLandscapeLeft:
                 imageOrientation = UIImageOrientationUp;
                 break;
-                
+
             case UIDeviceOrientationLandscapeRight:
                 imageOrientation = UIImageOrientationDown;
                 break;
-                
+
             case UIDeviceOrientationPortraitUpsideDown:
                 imageOrientation = UIImageOrientationLeft;
                 break;
-                
+
             default:
                 imageOrientation = UIImageOrientationRight;
                 break;
@@ -292,21 +300,21 @@
             case UIDeviceOrientationLandscapeLeft:
                 imageOrientation = UIImageOrientationDownMirrored;
                 break;
-                
+
             case UIDeviceOrientationLandscapeRight:
                 imageOrientation = UIImageOrientationUpMirrored;
                 break;
-                
+
             case UIDeviceOrientationPortraitUpsideDown:
                 imageOrientation = UIImageOrientationRightMirrored;
                 break;
-                
+
             default:
                 imageOrientation = UIImageOrientationLeftMirrored;
                 break;
         }
     }
-    
+
     return imageOrientation;
 }
 
@@ -316,21 +324,21 @@
     AVCaptureStillImageOutput *output = self.session.outputs.lastObject;
     AVCaptureConnection *videoConnection = output.connections.lastObject;
     if (!videoConnection) return;
-    
+
     [output captureStillImageAsynchronouslyFromConnection:videoConnection
                                         completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
-                                            
+
                                             if (!imageDataSampleBuffer || error) return;
-                                            
+
                                             NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
-                                            
+
                                             UIImage *image = [UIImage imageWithCGImage:[[[UIImage alloc] initWithData:imageData] CGImage]
                                                                                  scale:1.0f
                                                                            orientation:[self currentImageOrientation]];
-                                            
+
                                             [self handleImage:image];
                                         }];
-    
+
 }
 
 

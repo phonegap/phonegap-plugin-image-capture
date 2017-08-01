@@ -1,9 +1,9 @@
 //
 //  CameraViewController.h
-//  HelloCordova
+//  Custom Camera
 //
-//  Created by smacdona on 7/21/17.
-//
+//  Created by Chris Leversuch on 30/06/2016.
+//  Copyright © 2016 Brightec. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
