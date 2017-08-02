@@ -41,7 +41,6 @@ This plugin provides an implementation for clicking pictures with a device camer
 The ImageCapture constructor uses the mediastream track obtained by using the phonegap-plugin-media-stream to create an object.
 
 ### Example
-        ```js
 
             navigator.mediaDevices.getUserMedia({
                 'audio': true,
@@ -53,7 +52,6 @@ The ImageCapture constructor uses the mediastream track obtained by using the ph
                 var track = getmedia.getVideoTracks()[0];
                 var imageCapture = new ImageCapture(track);
             });
-        ```
 
 
 ## The `imageCapture` object
@@ -72,7 +70,6 @@ The imageCapture object has the following methods:
 The takePhoto() promise accepts an optional PhotoSettings parameter and allows the user to take a picture. The implementation in iOS allows the user to open a camera view and click a picture. Android has integrated support for the [W3C Media Stream API](https://www.w3.org/TR/mediacapture-streams/) and the [W3C MediaStream Image Capture API](https://www.w3.org/TR/image-capture/) from Chrome 59 and the latest Android System Webview. The takePhoto() promise resolves with a `blob` on successful capture of a picture.
 
 ### Example
-        ```js
 
             imageCapture.takePhoto()
                 .then(blob => {
@@ -81,7 +78,6 @@ The takePhoto() promise accepts an optional PhotoSettings parameter and allows t
                     image.src = URL.createObjectURL(blob);
                 })
                 .catch(err => console.error('takePhoto() failed: ', err));
-        ```
 
 
 ## imageCapture.getPhotoCapabilities()
@@ -96,13 +92,11 @@ The getPhotoCapabilities() method retrieves the ranges of available configuratio
 
 ### Example
         
-        ```js
 
             imageCapture.getPhotoCapabilities()
                 .then(function(capabilities){
                     console.log(capabilities);
                 });
-        ```
 
 
 ## imageCapture.getPhotoSettings()
@@ -116,13 +110,12 @@ This method returns the current configuration values for the settings for taking
 
 ### Example
         
-        ```js
 
             imageCapture.getPhotoSettings()
                 .then(function(settings){
                     console.log(settings);
                 });
-        ```
+        
 
 
 
