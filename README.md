@@ -84,10 +84,10 @@ The takePhoto() promise accepts an optional PhotoSettings parameter and allows t
 
 The getPhotoCapabilities() method retrieves the ranges of available configuration options, if any. The promise returns the value of the following four properties if available:
 
--redEyeReduction : Value can be one of `never` , `always` and `controllable` if available.
--imageHeight : Has `max`, `min` and `step` values if available.
--imageWidth : Has `max`, `min` and `step` values if available.
--fillLightMode : Value can be one of `auto`, `flash` and `off` if available.
+- redEyeReduction : Value can be one of `never` , `always` and `controllable` if available.
+- imageHeight : Has `max`, `min` and `step` values if available.
+- imageWidth : Has `max`, `min` and `step` values if available.
+- fillLightMode : Value can be one of `auto`, `flash` and `off` if available.
 
 
 ### Example
@@ -103,10 +103,10 @@ The getPhotoCapabilities() method retrieves the ranges of available configuratio
 
 This method returns the current configuration values for the settings for taking a picture. The following values are returned by this promise :
 
--redEyeReduction _(Boolean)_ ,if available.
--imageHeight  _(Number)_
--imageWidth  _(Number)_
--fillLightMode : One of the three values : `auto`, `flash` and `off` ,if available.
+- redEyeReduction _(Boolean)_ ,if available.
+- imageHeight  _(Number)_
+- imageWidth  _(Number)_
+- fillLightMode : One of the three values : `auto`, `flash` and `off` ,if available.
 
 ### Example
         
