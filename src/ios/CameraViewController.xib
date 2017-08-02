@@ -42,15 +42,13 @@
                                 <action selector="takePhotoButtonWasTouched:" destination="-1" eventType="touchUpInside" id="LLt-8y-05P"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ap0-9j-R4K">
-                            <rect key="frame" x="354" y="26" width="30" height="44"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ap0-9j-R4K">
+                            <rect key="frame" x="321" y="26" width="63" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="kNQ-my-0uh"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="46"/>
-                            <state key="normal" title="X">
-                                <color key="titleColor" red="1" green="0.25627959471769413" blue="0.2247188121130006" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                            </state>
+                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                            <state key="normal" title="Cancel"/>
                             <connections>
                                 <action selector="cancelButtonWasTouched:" destination="-1" eventType="touchUpInside" id="KMN-Qx-RAn"/>
                             </connections>

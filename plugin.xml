@@ -60,6 +60,7 @@
          <header-file src="src/ios/CameraViewController.h" />
          <source-file src="src/ios/CameraViewController.m" />
          <resource-file src="src/ios/CameraViewController.xib" />
+         <resource-file src="src/ios/CDVImageCapture.bundle" />
          <header-file src="src/ios/JPSCameraButton.h" />
          <source-file src="src/ios/JPSCameraButton.m" />
          <header-file src="src/ios/UIImage+DrawBlock.h" />
