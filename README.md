@@ -127,5 +127,5 @@ This method takes a snapshot of the live video being held in the mediastream tra
 
 ## Quirks
 
-In order to add a `blob` object as a source for an <img> tag, `blob:` should be added to the img-src part of the Content-Security-Policy meta tag in your `index.html` . 
+In order to add a `blob` object as a source for an `img` tag, `blob:` should be added to the img-src part of the Content-Security-Policy meta tag in your `index.html` . 
 
