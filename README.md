@@ -22,7 +22,7 @@ description: Takes picture from the device camera with the specified settings
 -->
 
 
-# phonegap-plugin-image-capture
+# phonegap-plugin-image-capture [![Build Status](https://travis-ci.org/phonegap/phonegap-plugin-image-capture.svg)](https://travis-ci.org/phonegap/phonegap-plugin-image-capture)
 
 This plugin provides an implementation for clicking pictures with a device camera based on the [W3C MediaStream Image Capture API](https://www.w3.org/TR/image-capture/) for iOS and Android. In order to achieve the image capture, this plugin uses the [phonegap-plugin-media-stream](https://github.com/phonegap/phonegap-plugin-media-stream) which is based on the [W3C Media Stream API](https://www.w3.org/TR/mediacapture-streams/). The phonegap-plugin-media-stream makes the mediastream track available to the phonegap-plugin-image-capture which allows the user to click a picture. The phonegap-plugin-media-stream is added as a dependency to the phonegap-plugin-image-capture plugin.
 
