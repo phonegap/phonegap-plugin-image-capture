@@ -5,6 +5,7 @@
 *.cache
 Thumbs.db
 *.DS_Store
+package-lock.json
 
 *.bak
 *.cache
