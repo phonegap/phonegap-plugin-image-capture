@@ -1,22 +1,14 @@
 {
   "name": "phonegap-plugin-image-capture",
   "version": "0.0.1",
-  "description": "Cordova Camera Plugin",
+  "description": "Phonegap Image Capture Plugin",
   "types": "./types/index.d.ts",
   "cordova": {
     "id": "phonegap-plugin-image-capture",
     "platforms": [
-      "firefoxos",
       "android",
-      "amazon-fireos",
-      "ubuntu",
       "ios",
-      "blackberry10",
-      "wp7",
-      "wp8",
-      "windows8",
-      "browser",
-      "windows"
+      "browser"
     ]
   },
   "repository": {
@@ -28,12 +20,12 @@
   },
   "keywords": [
     "cordova",
+    "phonegap",
     "camera",
     "ecosystem:cordova",
     "cordova-android",
     "cordova-ios",
-    "cordova-browser",
-    "cordova-windows"
+    "cordova-browser"
   ],
   "scripts": {
     "test": "npm run jshint && jasmine-node --color spec",
@@ -49,10 +41,8 @@
     }
   },
   "devDependencies": {
-    "dmd-plugin-cordova-plugin": "^0.1.0",
     "husky": "^0.10.1",
     "jasmine-node": "^1.14.5",
-    "jsdoc-to-markdown": "^1.2.0",
     "jshint": "^2.6.0",
     "pluginpub": "^0.0.8"
   }
