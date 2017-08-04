@@ -123,7 +123,7 @@ This method takes a snapshot of the live video being held in the mediastream tra
 
 ## [Contributing](https://github.com/phonegap/phonegap-plugin-image-capture/blob/master/.github/CONTRIBUTING.md)
 
-# [LICENSE](https://github.com/phonegap/phonegap-plugin-image-capture/blob/master/LICENSE)
+## [LICENSE](https://github.com/phonegap/phonegap-plugin-image-capture/blob/master/LICENSE)
 
 ## Quirks
 
