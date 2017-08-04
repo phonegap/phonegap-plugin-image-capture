@@ -118,7 +118,7 @@ This method returns the current configuration values for the settings for taking
 
 ## imageCapture.grabFrame()
 
-This method takes a snapshot of the live video being held in the mediastream track, returning an ImageBitmap if successful. This method is not supported on iOS and rejected promise with `DOMException` on iOS.
+This method takes a snapshot of the live video being held in the mediastream track, returning an ImageBitmap if successful. This method is not supported on iOS and rejected promise with `DOMException` is returned on iOS.
 
 
 ## [Contributing](https://github.com/phonegap/phonegap-plugin-image-capture/blob/master/.github/CONTRIBUTING.md)
