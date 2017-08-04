@@ -1,7 +1,4 @@
----
-title: Image Capture
-description: Takes picture from the device camera with the specified settings
----
+
 <!---
 # license: Licensed to the Apache Software Foundation (ASF) under one
 #         or more contributor license agreements.  See the NOTICE file
@@ -58,10 +55,10 @@ The ImageCapture constructor uses the mediastream track obtained by using the ph
 
 The imageCapture object has the following methods:
 
-- takePhoto(optional PhotoSettings photoSettings)
-- getPhotoCapabilities()
-- getPhotoSettings()
-- grabFrame()
+- [takePhoto(optional PhotoSettings photoSettings)](https://github.com/phonegap/phonegap-plugin-image-capture#imagecapturetakephotooptional-photosettings-photosettings)
+- [getPhotoCapabilities()](https://github.com/phonegap/phonegap-plugin-image-capture#imagecapturegetphotocapabilities)
+- [getPhotoSettings()](https://github.com/phonegap/phonegap-plugin-image-capture#imagecapturegetphotosettings)
+- [grabFrame()](https://github.com/phonegap/phonegap-plugin-image-capture#imagecapturegrabframe)
 
 
 
@@ -124,6 +121,9 @@ This method returns the current configuration values for the settings for taking
 This method takes a snapshot of the live video being held in the mediastream track, returning an ImageBitmap if successful. This method is not supported on iOS and rejected promise with `DOMException` on iOS.
 
 
+## [Contributing](https://github.com/phonegap/phonegap-plugin-image-capture/blob/master/.github/CONTRIBUTING.md)
+
+# [LICENSE](https://github.com/phonegap/phonegap-plugin-image-capture/blob/master/LICENSE)
 
 ## Quirks
 
