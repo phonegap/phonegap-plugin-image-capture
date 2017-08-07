@@ -19,45 +19,44 @@
  *
 */
 
-/* globals ImageCapture*/
+/* globals ImageCapture */
 /* jshint jasmine: true */
 
-exports.defineManualTests = function(contentEl, createActionButton) {
-    var frontCamera = false ;
+exports.defineManualTests = function (contentEl, createActionButton) {
+    var frontCamera = false;
     var flashON = false;
-    var setPicture = function() {
+    var setPicture = function () {
         var constraints = {
             'audio': true,
             'video': {
                 facingMode: 'environment'
             }
         };
-        if(frontCamera === true){
+        if (frontCamera === true) {
             constraints.video.facingMode = 'user';
         }
         navigator.mediaDevices.getUserMedia(constraints
-        ).then(function(getmedia) {
+        ).then(function (getmedia) {
             var track = getmedia.getVideoTracks()[0];
             var imageCapture = new ImageCapture(track);
             var options = {
                 imageHeight: 800,
                 imageWidth: 600,
-                fillLightMode: "off"
+                fillLightMode: 'off'
             };
-            if(flashON === true){
-                options.fillLightMode = "flash";
+            if (flashON === true) {
+                options.fillLightMode = 'flash';
             }
             imageCapture.takePhoto(options)
                 .then(blob => {
                     console.log('Photo taken: ' + blob.type + ', ' + blob.size + 'B');
 
                     const image = document.getElementById('info');
-                    image.src = URL.createObjectURL(blob);
+                    image.src = URL.createObjectURL(blob); // eslint-disable-line no-undef
                 })
                 .catch(err => console.error('takePhoto() failed: ', err));
 
         });
-
 
     };
 
@@ -67,30 +66,27 @@ exports.defineManualTests = function(contentEl, createActionButton) {
 
     var flashText = '<div id="flashText"> Press button above to Turn the Flash ON</div>';
 
-
-
     contentEl.innerHTML = '<img id="info"></img>' + clickPicture + flash + flashText;
 
-    createActionButton('Rear Camera', function() {
-        if(frontCamera === true){
+    createActionButton('Rear Camera', function () {
+        if (frontCamera === true) {
             frontCamera = false;
         }
         setPicture();
-    }, "Take_Picture");
-    createActionButton('Front Camera', function() {
-        if(frontCamera === false){
+    }, 'Take_Picture');
+    createActionButton('Front Camera', function () {
+        if (frontCamera === false) {
             frontCamera = true;
         }
         setPicture();
-    }, "Take_Picture");
-    createActionButton('Flash', function() {
-        if(flashON === false){
+    }, 'Take_Picture');
+    createActionButton('Flash', function () {
+        if (flashON === false) {
             flashON = true;
-            document.getElementById('flashText').innerHTML = "Press button above to Turn the Flash OFF";
+            document.getElementById('flashText').innerHTML = 'Press button above to Turn the Flash OFF';
         } else {
             flashON = false;
-            document.getElementById('flashText').innerHTML = "Press button above to Turn the Flash ON";
+            document.getElementById('flashText').innerHTML = 'Press button above to Turn the Flash ON';
         }
-    }, "flash");
-    
+    }, 'flash');
 };

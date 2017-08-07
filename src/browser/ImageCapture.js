@@ -21,12 +21,12 @@
 
 var OriginalImageCapture = window.ImageCapture;
 
-var ImageCapture = function(mediaStreamTrack) {
+var ImageCapture = function (mediaStreamTrack) {
     this.nativeImageCapture = new OriginalImageCapture(mediaStreamTrack);
     return this;
 };
 
-ImageCapture.prototype.takePhoto = function(photoSettings) {
+ImageCapture.prototype.takePhoto = function (photoSettings) {
     if (this.nativeImageCapture.setOptions) {
         this.nativeImageCapture.setOptions(photoSettings);
         return this.nativeImageCapture.takePhoto();
@@ -35,19 +35,19 @@ ImageCapture.prototype.takePhoto = function(photoSettings) {
     }
 };
 
-ImageCapture.prototype.getPhotoCapabilities = function() {
+ImageCapture.prototype.getPhotoCapabilities = function () {
     return this.nativeImageCapture.getPhotoCapabilities();
 };
 
-ImageCapture.prototype.getPhotoSettings = function() {
+ImageCapture.prototype.getPhotoSettings = function () {
     return this.nativeImageCapture.getPhotoSettings();
 };
 
-ImageCapture.prototype.grabFrame = function() {
+ImageCapture.prototype.grabFrame = function () {
     return this.nativeImageCapture.grabFrame();
 };
 
-ImageCapture.prototype.setOptions = function(photoSettings) {
+ImageCapture.prototype.setOptions = function (photoSettings) {
     return this.nativeImageCapture.setOptions(photoSettings);
 };
 
