@@ -31,7 +31,7 @@ exports.defineManualTests = function(contentEl, createActionButton) {
             'video': {
                 facingMode: 'environment'
             }
-        }
+        };
         if(frontCamera === true){
             constraints.video.facingMode = 'user';
         }
