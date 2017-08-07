@@ -19,7 +19,7 @@
  *
 */
 
-/* globals Camera, resolveLocalFileSystemURL, FileEntry, CameraPopoverOptions, FileTransfer, FileUploadOptions, LocalFileSystem, MSApp */
+/* globals ImageCapture*/
 /* jshint jasmine: true */
 
 exports.defineManualTests = function(contentEl, createActionButton) {
