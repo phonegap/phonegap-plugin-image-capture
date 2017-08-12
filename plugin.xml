@@ -32,18 +32,6 @@
 
     <dependency id="phonegap-plugin-media-stream"/>
 
-    <!-- android -->
-    <platform name="android">
-        <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="ImageCapture">
-                <param name="android-package" value="org.apache.cordova.camera.CameraLauncher"/>
-            </feature>
-        </config-file>
-        <framework src="com.android.support:support-v4:24.1.1+" />
-
-      </platform>
-
-
      <!-- ios -->
      <platform name="ios">
          <js-module src="www/ImageCapture.js" name="ImageCapture">
