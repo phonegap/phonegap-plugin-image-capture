@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.1.1](https://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/tree/v1.1.1) (2017-08-16)
+[Full Changelog](https://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/compare/v1.1.0...v1.1.1)
+
+- 1.1.1 [view commit](http://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/commit/c3bff9f710436ff335863faf31cab0fad4253eba)
+- :bookmark: Bumping plugin version to 1.1.1 [view commit](http://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/commit/6a12accc16235b2cb99829f9af40ba382850a42d)
+- :poop: Fixing bad copy of files from XCode [view commit](http://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/commit/12187061c8eb7cb4377b031049e34f33c0e4216e)
+- Updating CHANGELOG [view commit](http://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/commit/8a93eb1740301d2e613c41c9676c1e104e9fa802)
+
 ## [v1.1.0](https://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/tree/v1.1.0) (2017-08-16)
 [Full Changelog](https://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/compare/v1.0.0...v1.1.0)
 
