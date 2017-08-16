@@ -68,7 +68,7 @@
     else if([fillLightMode isEqualToString:@"auto"]){
         cameraViewController.flashModeValue = AVCaptureFlashModeAuto;
     }
-    cameraViewController.mediaStreaInterface = self;
+    cameraViewController.mediaStreamInterface = self;
     [weakSelf.viewController presentViewController:cameraViewController animated:YES completion:^{
         weakSelf.hasPendingOperation = NO;
     }];
