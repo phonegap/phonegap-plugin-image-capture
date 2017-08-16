@@ -6,9 +6,9 @@
  to you under the Apache License, Version 2.0 (the
  "License"); you may not use this file except in compliance
  with the License.  You may obtain a copy of the License at
- 
+
  http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing,
  software distributed under the License is distributed on an
  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -43,7 +43,7 @@
 
 - (void)takePicture:(CDVInvokedUrlCommand*)command
 {
-    
+
     self.redEyeReduction  = command.arguments[0];
     NSNumber* imageHeight = [command argumentAtIndex:1 withDefault:nil];
     NSNumber* imageWidth = [command argumentAtIndex:2 withDefault:nil];
@@ -56,7 +56,7 @@
     //store callback to use in delegate
     self.command = command;
     __weak CDVImageCapture* weakSelf = self;
-    
+
     CameraViewController *cameraViewController = [[CameraViewController alloc] init];
     cameraViewController.camDirection = cameraDirection;
     if([fillLightMode isEqualToString:@"flash"]){
@@ -68,12 +68,12 @@
     else if([fillLightMode isEqualToString:@"auto"]){
         cameraViewController.flashModeValue = AVCaptureFlashModeAuto;
     }
-    cameraViewController.imageCaptureInterface = self;
+    cameraViewController.mediaStreaInterface = self;
     [weakSelf.viewController presentViewController:cameraViewController animated:YES completion:^{
         weakSelf.hasPendingOperation = NO;
     }];
-    
-    
+
+
 }
 
 - (void)receiveImage:(UIImage *)image
@@ -114,15 +114,15 @@
 - (void)getPhotoCapabilities:(CDVInvokedUrlCommand*)command
 {
     NSString *desc  = command.arguments[0];
-    
-    
+
+
     if([desc isEqualToString:@"frontcamera"]){
         _position = AVCaptureDevicePositionFront;
     }
     else if([desc isEqualToString:@"rearcamera"]){
         _position = AVCaptureDevicePositionBack;
     }
-    
+
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
     NSMutableArray *flashMode = [[NSMutableArray alloc] initWithCapacity:10];
     NSMutableDictionary *photocapabilities = [NSMutableDictionary dictionaryWithCapacity:10];
@@ -138,19 +138,19 @@
                 [flashMode addObject:@"auto"];
             }
             [photocapabilities setObject:flashMode forKey:@"fillLightMode"];
-            
+
             int max_w = 0;
             int min_w = INT_MAX;
             int max_h = 0;
             int min_h = INT_MAX;
-            
+
             NSArray* availFormats=device.formats;
             for (AVCaptureDeviceFormat* format in availFormats) {
                 CMVideoDimensions resolution = format.highResolutionStillImageDimensions;
                 int w = resolution.width;
                 int h = resolution.height;
                 NSLog(@"width=%d height=%d", w, h);
-                
+
                 if (w > max_w) {
                     max_w = w;
                 }
@@ -164,27 +164,27 @@
                     min_h = h;
                 }
             }
-            
+
             NSDictionary *imageHeight = @{
                                           @"max": [NSNumber numberWithInteger:max_h],
                                           @"min": [NSNumber numberWithInteger:min_h],
                                           @"step": [NSNumber numberWithInteger:0]
                                           };
             [photocapabilities setObject:imageHeight forKey:@"imageHeight"];
-            
+
             NSDictionary *imageWidth = @{
                                          @"max": [NSNumber numberWithInteger:max_w],
                                          @"min": [NSNumber numberWithInteger:min_w],
                                          @"step": [NSNumber numberWithInteger:0]
                                          };
             [photocapabilities setObject:imageWidth forKey:@"imageWidth"];
-            
+
             CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:photocapabilities];
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
             return;
         }
     }
-    
+
 }
 
 - (void)getPhotoSettings:(CDVInvokedUrlCommand*)command
@@ -198,7 +198,7 @@
     else if([desc isEqualToString:@"rearcamera"]){
         device = [self getCaptureDevice:AVCaptureDevicePositionBack];;
     }
-    
+
     if([device flashMode] == AVCaptureFlashModeOff){
         [photoSettings setObject:@"off" forKey:@"fillLightMode"];
     }
@@ -211,12 +211,12 @@
     if((self.defaultSize.width > 0) && (self.defaultSize.height >0)){
         [photoSettings setObject:[NSNumber numberWithFloat:self.defaultSize.width] forKey:@"imageWidth"];
         [photoSettings setObject:[NSNumber numberWithFloat:self.defaultSize.height] forKey:@"imageHeight"];
-        
+
     }
-    
+
     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:photoSettings];
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    
+
 }
 
 @end

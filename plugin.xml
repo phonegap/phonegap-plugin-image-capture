@@ -26,15 +26,8 @@
     <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
       <string/>
     </config-file>
-    <header-file src="src/ios/CameraViewController.h"/>
-    <header-file src="src/ios/JPSCameraButton.h"/>
-    <header-file src="src/ios/UIImage+DrawBlock.h"/>
     <header-file src="src/ios/CDVImageCapture.h"/>
-    <source-file src="src/ios/CameraViewController.m"/>
-    <source-file src="src/ios/JPSCameraButton.m"/>
-    <source-file src="src/ios/UIImage+DrawBlock.m"/>
     <source-file src="src/ios/CDVImageCapture.m"/>
-    <resource-file src="src/ios/CameraViewController.xib"/>
     <resource-file src="src/ios/CDVImageCapture.bundle"/>
     <framework src="ImageIO.framework" weak="true"/>
     <framework src="AssetsLibrary.framework"/>
