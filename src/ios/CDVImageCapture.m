@@ -75,6 +75,13 @@
 
 
 }
+- (void)receiveError
+{
+    //NSString *outputString = outputURL.absoluteString;
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Image Capture Failed"];
+    [self.commandDelegate sendPluginResult:result callbackId:self.command.callbackId];
+}
+
 
 - (void)receiveImage:(UIImage *)image
 {
