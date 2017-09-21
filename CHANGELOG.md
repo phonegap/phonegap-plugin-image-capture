@@ -1,5 +1,15 @@
 # Change Log
 
+## [v1.1.2](https://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/tree/v1.1.2) (2017-09-21)
+[Full Changelog](https://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/compare/v1.1.1...v1.1.2)
+
+- 1.1.2 [view commit](http://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/commit/5eff48fad6fbc640e38d29173f153306460bad48)
+- :bookmark: Bumping plugin version to 1.1.2 [view commit](http://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/commit/5f3b8a37373d384f9a154376259a3bc6104d764b)
+- ⬆️ bump phonegap-plugin-media-stream to 1.2.0 [view commit](http://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/commit/ec7c9b74b0662399b339f05e2a089609f285560b)
+- ⬆️ bump pluginpub version to 0.0.9 [view commit](http://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/commit/3808ff93f802f72a0fe30e298919ae2438c905f6)
+- :sparkles: Added native error callback for takePhoto() [view commit](http://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/commit/7c8134539b6911e2986aa1f8298eb764e8d134dc)
+- Updating CHANGELOG [view commit](http://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/commit/6274b7571caef684d4603eb223e93c7be92de4ab)
+
 ## [v1.1.1](https://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/tree/v1.1.1) (2017-08-16)
 [Full Changelog](https://github.com/git@github.com:phonegap/phonegap-plugin-image-capture/compare/v1.1.0...v1.1.1)
 
