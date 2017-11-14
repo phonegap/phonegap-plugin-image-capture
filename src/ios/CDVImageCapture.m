@@ -69,6 +69,7 @@
         cameraViewController.flashModeValue = AVCaptureFlashModeAuto;
     }
     cameraViewController.mediaStreamInterface = self;
+    cameraViewController.task = @"imageCapture";
     [weakSelf.viewController presentViewController:cameraViewController animated:YES completion:^{
         weakSelf.hasPendingOperation = NO;
     }];
