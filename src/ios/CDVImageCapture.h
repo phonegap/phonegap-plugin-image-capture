@@ -27,7 +27,6 @@
 
 
 @property (strong, nonatomic) CDVInvokedUrlCommand * command;
-- (NSString*) pluginLocalizedString:(NSString *)key;
 - (void)takePicture:(CDVInvokedUrlCommand*)command;
 - (void)receiveImage:(UIImage*)image;
 - (void)getPhotoCapabilities:(CDVInvokedUrlCommand*)command;
