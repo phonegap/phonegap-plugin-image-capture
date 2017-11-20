@@ -34,7 +34,7 @@ var ImageCapture = function (mediaStreamTrack) {
 
 ImageCapture.prototype.takePhoto = function (photoSettings) {
     var getValue = argscheck.getValue;
-    var trackDesc = this.track.description;
+    var trackLabel = this.track.label;
     return new Promise(function (resolve, reject) {
         var success = function (info) {
             // if fetch exists & it is a native implementation
@@ -77,7 +77,7 @@ ImageCapture.prototype.takePhoto = function (photoSettings) {
         var fillLightMode = getValue(photoSettings.fillLightMode, 'off');
 
         var args = [redEyeReduction, imageHeight, imageWidth, fillLightMode,
-            trackDesc
+            trackLabel
         ];
 
         exec(success, fail, 'ImageCapture', 'takePicture', args);
@@ -85,7 +85,7 @@ ImageCapture.prototype.takePhoto = function (photoSettings) {
 };
 
 ImageCapture.prototype.getPhotoCapabilities = function () {
-    var trackDesc = this.track.description;
+    var trackLabel = this.track.label;
     return new Promise(function (resolve, reject) {
         var success = function (info) {
             console.log('success' + JSON.stringify(info));
@@ -94,12 +94,12 @@ ImageCapture.prototype.getPhotoCapabilities = function () {
         var fail = function (error) {
             reject(error);
         };
-        exec(success, fail, 'ImageCapture', 'getPhotoCapabilities', [trackDesc]);
+        exec(success, fail, 'ImageCapture', 'getPhotoCapabilities', [trackLabel]);
     });
 };
 
 ImageCapture.prototype.getPhotoSettings = function () {
-    var trackDesc = this.track.description;
+    var trackLabel = this.track.label;
     return new Promise(function (resolve, reject) {
         var success = function (info) {
             console.log('success' + JSON.stringify(info));
@@ -108,7 +108,7 @@ ImageCapture.prototype.getPhotoSettings = function () {
         var fail = function (error) {
             reject(error);
         };
-        exec(success, fail, 'ImageCapture', 'getPhotoSettings', [trackDesc]);
+        exec(success, fail, 'ImageCapture', 'getPhotoSettings', [trackLabel]);
     });
 };
 
