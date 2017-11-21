@@ -50,7 +50,7 @@ ImageCapture.prototype.takePhoto = function (photoSettings) {
                     .catch(function () {
                     });
             } else {
-                var byteCharacters = atob(info); // eslint-disable-line no-undef
+                var byteCharacters = atob(info.replace(/\s/g, '')); // eslint-disable-line no-undef
                 var byteNumbers = new Array(byteCharacters.length);
                 for (var i = 0; i < byteCharacters.length; i++) {
                     byteNumbers[i] = byteCharacters.charCodeAt(i);
