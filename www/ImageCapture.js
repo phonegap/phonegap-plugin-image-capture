@@ -50,13 +50,21 @@ ImageCapture.prototype.takePhoto = function (photoSettings) {
                     .catch(function () {
                     });
             } else {
+                var sliceSize = 1024;
                 var byteCharacters = atob(info.replace(/\s/g, '')); // eslint-disable-line no-undef
-                var byteNumbers = new Array(byteCharacters.length);
-                for (var i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                var bytesLength = byteCharacters.length;
+                var slicesCount = Math.ceil(bytesLength / sliceSize);
+                var byteArrays = new Array(slicesCount);
+                for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+                    var begin = sliceIndex * sliceSize;
+                    var end = Math.min(begin + sliceSize, bytesLength);
+                    var bytes = new Array(end - begin);
+                    for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
+                        bytes[i] = byteCharacters[offset].charCodeAt(0);
+                    }
+                    byteArrays[sliceIndex] = new Uint8Array(bytes);
                 }
-                var byteArray = new Uint8Array(byteNumbers);
-                var blob = new Blob([byteArray], { // eslint-disable-line no-undef
+                var blob = new Blob(byteArrays, { // eslint-disable-line no-undef
                     type: 'image/png'
                 });
                 resolve(blob);
