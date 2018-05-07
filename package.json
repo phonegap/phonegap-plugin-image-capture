@@ -1,6 +1,6 @@
 {
   "name": "phonegap-plugin-image-capture",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Phonegap Image Capture Plugin",
   "types": "./types/index.d.ts",
   "cordova": {
